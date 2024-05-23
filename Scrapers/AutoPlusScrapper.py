@@ -199,7 +199,7 @@ class ScrappAutoPlusTnNeuf:
         standardize.load_data_in_csv_file(dataStandardized, file_path)
 
     def run_whole_process(self):
-        self.auto_plus_scrapper_runner('AutoPlusFilePostScrap')
+        # self.auto_plus_scrapper_runner('AutoPlusFilePostScrap')
         data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus", "Neuf", "AutoPlusFilePostScrap")
         AutoPlusData = pd.read_csv(data_directory + '.csv',sep=',')
         AutoPlusDataPostStandardise = self.auto_plus_columns_standardise(AutoPlusData)
