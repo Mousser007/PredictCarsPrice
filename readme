@@ -1,0 +1,11 @@
+Workflow du projet(les differents pipeline)
+
+1-executer les fichiers de scrapping
+2-standardiser les colonnes pour chaque site
+3-fusionner les données des differents sites
+4-nettoyage des données
+5-preparer une dataset pour alimenter le modele ml
+6-entrainer le modele
+7-enrigistrer le modele ml
+8-deploier le modele 
+

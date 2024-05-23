@@ -1,0 +1,71 @@
+,Marque,Modele,Annee,Energie,BoiteVitesse,Kilometrage,PuissanceFiscale,Prix
+0,Renault,Kangoo,2005,Diesel,Manuelle,392 Km,6 CV,Prix: 17 600 DT
+1,Seat,Ibiza,05-2018,Essence,Manuelle,160000 Km,4 CV,Prix: 40 000 DT
+2,Seat,Leon,01-2016,Essence,Manuelle,164000 Km,6 CV,Prix: 48 000 DT
+3,Opel,Mokka,01-2018,Essence,Manuelle,100000 Km,8 CV,Prix: 110 000 DT
+4,Renault,Mégane Sedan,07-2019,Essence,Manuelle,36000 Km,7 CV,Prix: 70 000 DT
+5,Great Wall,C30,03-2017,Essence,Manuelle,119000 Km,6 CV,Prix: 29 500 DT
+6,Fiat,500,01-2017,Essence,Automatique,66500 Km,4 CV,Prix: 48 500 DT
+7,Volkswagen,Tiguan,11-2018,Essence,Automatique,160000 Km,8 CV,Prix: 135 000 DT
+8,Peugeot,2008,07-2016,Essence,Manuelle,124000 Km,5 CV,Prix: 49 000 DT
+9,Suzuki,Celerio,05-2017,Essence,Manuelle,138000 Km,4 CV,Prix: 27 000 DT
+10,Renault,Megane,04-2006,Diesel,Manuelle,390000 Km,5 CV,Prix: 14 900 DT
+11,Seat,Ibiza,08-2018,Essence,Manuelle,140000 Km,4 CV,Prix: 42 600 DT
+12,Opel,Insignia,05-2013,Essence,Manuelle,260000 Km,11 CV,Prix: 25 900 DT
+13,Mazda,CX-5,03-2014,Essence,Automatique,160000 Km,9 CV,Prix: 55 000 DT
+14,Peugeot,Bipper Tepee,05-2016,Diesel,Manuelle,158000 Km,5 CV,Prix: 28 000 DT
+15,Fiat,Punto,12-2008,Essence,Manuelle,242352 Km,5 CV,Prix: 18 000 DT
+16,Volvo,XC 70,04-2022,Essence,Automatique,35000 Km,9 CV,Prix: 151 500 DT
+17,Peugeot,508,05-2011,Essence,Manuelle,240000 Km,9 CV,Prix: 30 000 DT
+18,Mercedes,200,01-1982,Diesel,Manuelle,550000 Km,8 CV,Prix: 97 000 DT
+19,Isuzu,D- max,08-2021,Diesel,Manuelle,40000 Km,6 CV,Prix: 55 330 DT
+20,Fiat,Grande Punto,03-2015,Essence,Manuelle,275000 Km,4 CV,Prix: 27 000 DT
+21,Peugeot,508,2012,Essence,Automatique,133000 Km,7 CV,Prix: 32 000 DT
+22,Fiat,Fiorino Qubo,01-2020,Diesel,Manuelle,97000 Km,5 CV,Prix: 32 000 DT
+23,Volkswagen,Polo 7,2010,Essence,Manuelle,48000 Km,4 CV,Prix: 25 000 DT
+24,Peugeot,208,03-2022,Essence,Manuelle,900 Km,5 CV,Prix: 61 000 DT
+25,Seat,Leon,01-2018,Essence,Manuelle,149000 Km,6 CV,Prix: 62 500 DT
+26,Audi,A4,02-2014,Essence,Automatique,200000 Km,7 CV,Prix: 45 000 DT
+27,Renault,Clio 5,10-2003,Essence,Manuelle,260000 Km,6 CV,Prix: 18 500 DT
+28,Renault,Laguna,03-2009,Diesel,Manuelle,65000 Km,6 CV,Prix: 27 500 DT
+29,Volkswagen,Passat,03-2016,Essence,Manuelle,103000 Km,7 CV,Prix: 67 000 DT
+30,Citroen,C Elysée,02-2014,Essence,Manuelle,199467 Km,5 CV,Prix: 23 500 DT
+31,Volkswagen,Jetta,10-2008,Essence,Manuelle,174000 Km,7 CV,Prix: 28 000 DT
+32,Renault,Laguna 3,04-2009,Diesel,Manuelle,65000 Km,6 CV,Prix: 30 500 DT
+33,Nissan,Micra,01-2014,Essence,Manuelle,186000 Km,4 CV,Prix: 24 500 DT
+34,Mercedes,Classe E,08-2013,Diesel,Automatique,175000 Km,7 CV,Prix: 105 000 DT
+35,Mitsubishi,L200,03-2011,Diesel,Manuelle,220000 Km,10 CV,Prix: 46 500 DT
+36,Kia,RIO,06-2015,Essence,Manuelle,56000 Km,5 CV,Prix: 39 000 DT
+37,Hyundai,I20,11-2019,Essence,Manuelle,77000 Km,5 CV,Prix: 35 500 DT
+38,Renault,Symbol,02-2010,Essence,Manuelle,270000 Km,5 CV,Prix: 22 000 DT
+39,Nissan,Qashqai,08-2011,Essence,Automatique,147000 Km,9 CV,Prix: 38 000 DT
+40,Mahindra,GOA,05-2019,Essence,Manuelle,44700 Km,5 CV,Prix: 30 500 DT
+41,Renault,Mégane Sedan,07-2019,Essence,Manuelle,35000 Km,7 CV,Prix: 78 000 DT
+42,Volkswagen,Passat,09-2012,Diesel,Automatique,197000 Km,5 CV,Prix: 43 000 DT
+43,BMW,SERIE 3,11-2011,Essence,Manuelle,143000 Km,7 CV,Prix: 42 000 DT
+44,Renault,Megane 2,05-2005,Essence,Manuelle,360000 Km,6 CV,Prix: 21 000 DT
+45,Mahindra,Balero,06-2020,Essence,Manuelle,120000 Km,6 CV,Prix: 15 000 DT
+46,Hyundai,Grand i10,03-2022,Essence,Manuelle,12000 Km,5 CV,Prix: 50 000 DT
+47,Fiat,500,01-2012,Essence,Manuelle,145000 Km,4 CV,Prix: 32 000 DT
+48,Volkswagen,Passat,06-2001,Essence,Manuelle,270000 Km,7 CV,Prix: 20 000 DT
+49,Citroen,C Elysée,03-2014,Essence,Manuelle,200000 Km,5 CV,Prix: 25 000 DT
+50,Hyundai,Grand i10,07-2016,Essence,Automatique,122000 Km,5 CV,Prix: 34 000 DT
+51,Ford,Focus,10-2007,Essence,Manuelle,127000 Km,6 CV,Prix: 32 000 DT
+52,Ford,Fiesta,08-2012,Essence,Manuelle,216000 Km,5 CV,Prix: 23 000 DT
+53,Citroen,Nemo,03-2015,Essence,Manuelle,84000 Km,5 CV,Prix: 34 000 DT
+54,Fiat,Doblo,12-2017,Diesel,Manuelle,84000 Km,5 CV,Prix: 33 000 DT
+55,BMW,X1,04-2013,Essence,Automatique,143000 Km,9 CV,Prix: 49 000 DT
+56,Mazda,CX-5,09-2012,Essence,Manuelle,196000 Km,9 CV,Prix: 54 000 DT
+57,Seat,Leon,11-2016,Essence,Manuelle,125000 Km,6 CV,Prix: 50 000 DT
+58,Geely,GC 6,10-2020,Essence,Manuelle,30000 Km,6 CV,Prix: 43 000 DT
+59,Peugeot,3008,12-2017,Essence,Automatique,58000 Km,9 CV,Prix: 105 000 DT
+60,Ford,Focus,11-2018,Essence,Manuelle,122000 Km,6 CV,Prix: 46 000 DT
+61,Peugeot,208,03-2021,Essence,Manuelle,59000 Km,5 CV,Prix: 50 000 DT
+62,Hyundai,Accent,02-2015,Essence,Manuelle,120000 Km,6 CV,Prix: 36 000 DT
+63,Peugeot,2008,05-2015,Essence,Manuelle,200000 Km,5 CV,Prix: 35 000 DT
+64,Mitsubishi,L200,04-2008,Diesel,Manuelle,1000 Km,10 CV,Prix: 25 999 DT
+65,Opel,Astra,12-2008,Essence,Manuelle,206000 Km,5 CV,Prix: 31 500 DT
+66,Land-Rover,Defender,10-1979,Essence,Manuelle,350000 Km,13 CV,Prix: 17 000 DT
+67,Volkswagen,Golf 7,2017,Essence,Manuelle,150000 Km,5 CV,Prix: 61 000 DT
+68,Suzuki,Swift,11-2020,Diesel,Manuelle,45000 Km,5 CV,Prix: 43 000 DT
+69,Audi,A3,06-2016,Essence,Manuelle,120000 Km,6 CV,Prix: 67 000 DT
