@@ -45,24 +45,36 @@ class ScrapperAutomobileTnOcc:
         try:
             self.driver.get('https://www.automobile.tn/fr/neuf/audi')
             logger.info('Page loaded: %s', self.driver.current_url)
-            self.driver.delete_all_cookies()  # Clear cookies
-            time.sleep(10)
-            logger.info('Cookies cleared and waiting for 10 seconds')
-            logger.info('Current URL after waiting: %s', self.driver.current_url)
             
-            # Capture the final page source
+            # Clear cookies to avoid redirections based on previous data
+            self.driver.delete_all_cookies()
+            logger.info('Cookies cleared')
+
+            # Wait for the page to load completely
+            time.sleep(15)
+            logger.info('Waiting for 15 seconds to ensure the page is fully loaded')
+            
+            # Capture the current URL after waiting
+            current_url = self.driver.current_url
+            logger.info('Current URL after waiting: %s', current_url)
+
+            # Capture the final page source for debugging purposes
             page_source = self.driver.page_source
-            with open("page_source.html", "w") as file:
+            with open("/mnt/data/page_source.html", "w") as file:
                 file.write(page_source)
+            logger.info('Page source saved for debugging')
+
             # Check if URL has changed
-            if self.driver.current_url != 'https://www.automobile.tn/fr/neuf/audi':
-                logger.warning('URL changed after loading: %s', self.driver.current_url)
+            if current_url != 'https://www.automobile.tn/fr/neuf/audi':
+                logger.warning('URL changed after loading: %s', current_url)
+
         except WebDriverException as e:
             logger.error('WebDriverException occurred: %s', e)
             self.driver.refresh()
-            time.sleep(6)
-            logger.info('Page refreshed and waiting for 6 seconds')
-        return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None    
+            time.sleep(10)
+            logger.info('Page refreshed and waiting for 10 seconds')
+
+        return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None   
     # def parsing_page_source(self):
     #     try:
     #         self.driver.get('https://www.automobile.tn/fr/neuf/audi')
