@@ -1,5 +1,5 @@
-selenium
-pandas
+//selenium
+//pandas
 bs4
 time
 csv
