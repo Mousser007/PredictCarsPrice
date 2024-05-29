@@ -15,6 +15,7 @@ class ScrapperAutomobileTnOcc:
         # self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
         # self.pageInitiale = 1
         # self.pageFinale = 2
+        pass
         
     def parsing_page_source(self, url):
         try:
