@@ -208,7 +208,7 @@ class ScrapperAutomobileTnNeuf:
                 listCarsUrls.extend(self.extract_cars_url(soupBrandPage))
             all_Data = {}
             listTest = listCarsUrls[:50]
-            for index, carUrl in enumerate(listCarsUrls, start=1):
+            for index, carUrl in enumerate(listTest, start=1):
                 soup = self.scrapOcc.parsing_page_source(self.baseUrl + carUrl)
                 if soup.find('table', {'class': 'versions'}):
                     listeDesVersion = self.ExtractVersionList(soup)
