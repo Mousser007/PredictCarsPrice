@@ -31,68 +31,34 @@ class ScrapperAutomobileTnOcc:
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-gpu')
         options.add_argument('--window-size=1920x1080')
-        service = Service(ChromeDriverManager().install())
-        self.driver = webdriver.Chrome(service=service, options=options)
-        # self.driver = webdriver.Chrome(options=options)
+        self.driver = webdriver.Chrome(options=options)
         self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
     # def __init__(self):
     #     self.driver = webdriver.Chrome()
     #     self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
     #     self.pageInitiale = 1
     #     self.pageFinale = 2
-    
+      
     def parsing_page_source(self):
         try:
+            self.driver.delete_all_cookies()
             self.driver.get('https://www.automobile.tn/fr/neuf/audi')
             logger.info('Page loaded: %s', self.driver.current_url)
-            
-            # Clear cookies to avoid redirections based on previous data
-            self.driver.delete_all_cookies()
-            logger.info('Cookies cleared')
-
-            # Wait for the page to load completely
-            time.sleep(15)
-            logger.info('Waiting for 15 seconds to ensure the page is fully loaded')
-            
-            # Capture the current URL after waiting
-            current_url = self.driver.current_url
-            logger.info('Current URL after waiting: %s', current_url)
-
-            page_source = self.driver.page_source
-            with open("/Data/page_source.html", "w") as file:
-                file.write(page_source)
-            logger.info('Page source saved for debugging')
-            
-            # Check if URL has changed
-            if current_url != 'https://www.automobile.tn/fr/neuf/audi':
-                logger.warning('URL changed after loading: %s', current_url)
-
-        except WebDriverException as e:
-            logger.error('WebDriverException occurred: %s', e)
+            self.driver.delete_all_cookies()  # Clear cookies
+            time.sleep(6)
+        except WebDriverException:
             self.driver.refresh()
-            time.sleep(10)
-            logger.info('Page refreshed and waiting for 10 seconds')
-
-        return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None   
-    # def parsing_page_source(self):
+            time.sleep(5)
+        return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
+    #  def parsing_page_source(self, url):
     #     try:
-    #         self.driver.get('https://www.automobile.tn/fr/neuf/audi')
-    #         logger.info('Page loaded: %s', self.driver.current_url)
-    #         self.driver.delete_all_cookies()  # Clear cookies
+    #         self.driver.get(url)
     #         time.sleep(10)
     #     except WebDriverException:
     #         self.driver.refresh()
     #         time.sleep(6)
     #     return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
-     # def parsing_page_source(self, url):
-     #    try:
-     #        self.driver.get(url)
-     #        time.sleep(10)
-     #    except WebDriverException:
-     #        self.driver.refresh()
-     #        time.sleep(6)
-     #    return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
-    def extract_cars_urls(self, pageUrl):
+    # def extract_cars_urls(self, pageUrl):
         soup = self.parsing_page_source(pageUrl)
         atags = soup.find_all('a', {'class': 'occasion-link-overlay'})
         return [a.get('href')[12:] for a in atags]
