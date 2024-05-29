@@ -58,12 +58,15 @@ class ScrapperAutomobileTnOcc:
             current_url = self.driver.current_url
             logger.info('Current URL after waiting: %s', current_url)
 
-            # Capture the final page source for debugging purposes
             page_source = self.driver.page_source
-            with open("/mnt/data/page_source.html", "w") as file:
+            output_dir = "/mnt/data"
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            output_file = os.path.join(output_dir, "page_source.html")
+            with open(output_file, "w") as file:
                 file.write(page_source)
             logger.info('Page source saved for debugging')
-
+            
             # Check if URL has changed
             if current_url != 'https://www.automobile.tn/fr/neuf/audi':
                 logger.warning('URL changed after loading: %s', current_url)
