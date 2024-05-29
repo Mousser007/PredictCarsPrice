@@ -40,17 +40,39 @@ class ScrapperAutomobileTnOcc:
     #     self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
     #     self.pageInitiale = 1
     #     self.pageFinale = 2
-        
+    
     def parsing_page_source(self):
         try:
             self.driver.get('https://www.automobile.tn/fr/neuf/audi')
             logger.info('Page loaded: %s', self.driver.current_url)
             self.driver.delete_all_cookies()  # Clear cookies
             time.sleep(10)
-        except WebDriverException:
+            logger.info('Cookies cleared and waiting for 10 seconds')
+            logger.info('Current URL after waiting: %s', self.driver.current_url)
+            
+            # Capture the final page source
+            page_source = self.driver.page_source
+            with open("page_source.html", "w") as file:
+                file.write(page_source)
+            # Check if URL has changed
+            if self.driver.current_url != 'https://www.automobile.tn/fr/neuf/audi':
+                logger.warning('URL changed after loading: %s', self.driver.current_url)
+        except WebDriverException as e:
+            logger.error('WebDriverException occurred: %s', e)
             self.driver.refresh()
             time.sleep(6)
-        return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
+            logger.info('Page refreshed and waiting for 6 seconds')
+        return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None    
+    # def parsing_page_source(self):
+    #     try:
+    #         self.driver.get('https://www.automobile.tn/fr/neuf/audi')
+    #         logger.info('Page loaded: %s', self.driver.current_url)
+    #         self.driver.delete_all_cookies()  # Clear cookies
+    #         time.sleep(10)
+    #     except WebDriverException:
+    #         self.driver.refresh()
+    #         time.sleep(6)
+    #     return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
      # def parsing_page_source(self, url):
      #    try:
      #        self.driver.get(url)
