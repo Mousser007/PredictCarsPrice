@@ -35,15 +35,22 @@ class ScrapperAutomobileTnOcc:
     #     self.pageInitiale = 1
     #     self.pageFinale = 2
         
-    def parsing_page_source(self, url):
+    def parsing_page_source(self):
         try:
-            self.driver.get(url)
+            self.driver.get('https://www.automobile.tn/fr/neuf/audi')
             time.sleep(10)
         except WebDriverException:
             self.driver.refresh()
             time.sleep(6)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
-    
+     # def parsing_page_source(self, url):
+     #    try:
+     #        self.driver.get(url)
+     #        time.sleep(10)
+     #    except WebDriverException:
+     #        self.driver.refresh()
+     #        time.sleep(6)
+     #    return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     def extract_cars_urls(self, pageUrl):
         soup = self.parsing_page_source(pageUrl)
         atags = soup.find_all('a', {'class': 'occasion-link-overlay'})
