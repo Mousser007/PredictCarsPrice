@@ -53,10 +53,10 @@ class ScrapperAutomobileTnOcc:
     #  def parsing_page_source(self, url):
     #     try:
     #         self.driver.get(url)
-    #         time.sleep(10)
+    #         time.sleep(6)
     #     except WebDriverException:
     #         self.driver.refresh()
-    #         time.sleep(6)
+    #         time.sleep(5)
     #     return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     # def extract_cars_urls(self, pageUrl):
         soup = self.parsing_page_source(pageUrl)
