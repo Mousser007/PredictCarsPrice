@@ -59,11 +59,7 @@ class ScrapperAutomobileTnOcc:
             logger.info('Current URL after waiting: %s', current_url)
 
             page_source = self.driver.page_source
-            output_dir = "/mnt/data"
-            if not os.path.exists(output_dir):
-                os.makedirs(output_dir)
-            output_file = os.path.join(output_dir, "page_source.html")
-            with open(output_file, "w") as file:
+            with open("/Data/page_source.html", "w") as file:
                 file.write(page_source)
             logger.info('Page source saved for debugging')
             
