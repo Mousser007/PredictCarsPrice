@@ -11,22 +11,21 @@ from Cleaning.Cleaner import *
 from Config import *
 
 class ScrapperAutomobileTnOcc:
-    def __init__(self):
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')  # Run in headless mode
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--window-size=1920x1080')
-        service = Service(ChromeDriverManager().install())
-        self.driver = webdriver.Chrome(service=service, options=options)
-        self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
     # def __init__(self):
-    #     # self.driver = webdriver.Chrome()
-    #     # self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
-    #     # self.pageInitiale = 1
-    #     # self.pageFinale = 2
-    #     pass
+    #     options = webdriver.ChromeOptions()
+    #     options.add_argument('--headless')  # Run in headless mode
+    #     options.add_argument('--no-sandbox')
+    #     options.add_argument('--disable-dev-shm-usage')
+    #     options.add_argument('--disable-gpu')
+    #     options.add_argument('--window-size=1920x1080')
+    #     service = Service(ChromeDriverManager().install())
+    #     self.driver = webdriver.Chrome(service=service, options=options)
+    #     self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
+    def __init__(self):
+        self.driver = webdriver.Chrome()
+        self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
+        self.pageInitiale = 1
+        self.pageFinale = 2
         
     def parsing_page_source(self, url):
         try:
@@ -113,24 +112,24 @@ class ScrapperAutomobileTnOcc:
 
 class ScrapperAutomobileTnNeuf:
 
-    # def __init__(self):
-    #     self.scrapOcc =ScrapperAutomobileTnOcc()
-    #     self.driver = webdriver.Chrome()
-    #     self.baseUrl = 'https://www.automobile.tn/fr/neuf'
     def __init__(self):
-        self.scrapOcc = ScrapperAutomobileTnOcc()
-        
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')  # Run in headless mode
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--window-size=1920x1080')
-        
-        service = Service(ChromeDriverManager().install())
-        self.driver = webdriver.Chrome(service=service, options=options)
-        
+        self.scrapOcc =ScrapperAutomobileTnOcc()
+        self.driver = webdriver.Chrome()
         self.baseUrl = 'https://www.automobile.tn/fr/neuf'
+    # def __init__(self):
+    #     self.scrapOcc = ScrapperAutomobileTnOcc()
+        
+    #     options = webdriver.ChromeOptions()
+    #     options.add_argument('--headless')  # Run in headless mode
+    #     options.add_argument('--no-sandbox')
+    #     options.add_argument('--disable-dev-shm-usage')
+    #     options.add_argument('--disable-gpu')
+    #     options.add_argument('--window-size=1920x1080')
+        
+    #     service = Service(ChromeDriverManager().install())
+    #     self.driver = webdriver.Chrome(service=service, options=options)
+        
+    #     self.baseUrl = 'https://www.automobile.tn/fr/neuf'
     def automobile_tn_columns_standardise(self, dataframe):
         dataframe = dataframe.rename(columns={"Boîte": "BoiteVitesse",
                                               "Puissance fiscale": "PuissanceFiscale",
