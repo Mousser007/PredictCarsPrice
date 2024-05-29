@@ -4,7 +4,7 @@ from CleaningProcess import CleaningNewCars
 
 
 if __name__ == "__main__":
-    test = ScrapperAutomobileTnNeuf()
+    # test = ScrapperAutomobileTnNeuf()
     test2 = ScrapperAutomobileTnOcc()
     soup = test2.parsing_page_source('https://www.automobile.tn/fr/neuf/audi')
     print(soup)
