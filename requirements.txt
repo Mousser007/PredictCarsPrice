@@ -1,2 +1,8 @@
 selenium
 pandas
+bs4
+time
+csv
+numpy
+datetime
+os
