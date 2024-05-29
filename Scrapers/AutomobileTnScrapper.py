@@ -45,7 +45,7 @@ class ScrapperAutomobileTnOcc:
             self.driver.get('https://www.automobile.tn/fr/neuf/bmw')
             logger.info('Page loaded: %s', self.driver.current_url)
             self.driver.delete_all_cookies()  # Clear cookies
-            time.sleep(6)
+            time.sleep(20)
         except WebDriverException:
             self.driver.refresh()
             time.sleep(5)
