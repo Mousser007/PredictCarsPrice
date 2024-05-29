@@ -9,6 +9,10 @@ from Cleaning.BrandModelExtraction import ExtractionMarqueModele
 import pandas as pd 
 from Cleaning.Cleaner import *
 from Config import *
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 class ScrapperAutomobileTnOcc:
     def __init__(self):
@@ -27,7 +31,9 @@ class ScrapperAutomobileTnOcc:
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-gpu')
         options.add_argument('--window-size=1920x1080')
-        self.driver = webdriver.Chrome(options=options)
+        service = Service(ChromeDriverManager().install())
+        self.driver = webdriver.Chrome(service=service, options=options)
+        # self.driver = webdriver.Chrome(options=options)
         self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
     # def __init__(self):
     #     self.driver = webdriver.Chrome()
@@ -38,6 +44,8 @@ class ScrapperAutomobileTnOcc:
     def parsing_page_source(self):
         try:
             self.driver.get('https://www.automobile.tn/fr/neuf/audi')
+            logger.info('Page loaded: %s', self.driver.current_url)
+            self.driver.delete_all_cookies()  # Clear cookies
             time.sleep(10)
         except WebDriverException:
             self.driver.refresh()
