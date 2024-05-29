@@ -215,7 +215,7 @@ class ScrapperAutomobileTnNeuf:
         return all_Data
 
     def run_whole_process(self):
-        # self.automobile_tn_scrapper_runner('AutomobileTnFilePostScrap')
+        self.automobile_tn_scrapper_runner('AutomobileTnFilePostScrap')
         data_directory = os.path.join(path_to_DataPostScraping, "AutomobileTn", "Neuf",
                                       "AutomobileTnFilePostScrap")
         AutomobileTnData = pd.read_csv(data_directory + '.csv', sep=',')
