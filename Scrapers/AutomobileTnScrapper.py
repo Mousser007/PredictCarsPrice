@@ -37,7 +37,7 @@ class ScrapperAutomobileTnOcc:
             time.sleep(10)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(8)
+            time.sleep(10)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def extract_cars_urls(self, pageUrl):
