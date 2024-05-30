@@ -33,7 +33,7 @@ class ScrapperAutomobileTnOcc:
     #     self.pageInitiale = 1
     #     self.pageFinale = 2
       
-     def parsing_page_source(self, url):
+    def parsing_page_source(self, url):
         try:
             self.driver.get(url)
             time.sleep(6)
