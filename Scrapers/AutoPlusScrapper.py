@@ -1,5 +1,3 @@
-import sys
-sys.path.append('D:\\PredictCarsPrice')
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
