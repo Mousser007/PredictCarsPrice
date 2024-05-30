@@ -16,15 +16,7 @@ logger = logging.getLogger()
 
 class ScrapperAutomobileTnOcc:
     def __init__(self):
-        # options = webdriver.ChromeOptions()
-        # options.add_argument('--headless')  # Run in headless mode
-        # options.add_argument('--no-sandbox')
-        # options.add_argument('--disable-dev-shm-usage')
-        # options.add_argument('--disable-gpu')
-        # options.add_argument('--window-size=1920x1080')
-        # service = Service(ChromeDriverManager().install())
-        # self.driver = webdriver.Chrome(service=service, options=options)
-        # self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
+   
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')  # Run in headless mode
         options.add_argument('--no-sandbox')
@@ -41,26 +33,15 @@ class ScrapperAutomobileTnOcc:
     #     self.pageInitiale = 1
     #     self.pageFinale = 2
       
-    def parsing_page_source(self):
+     def parsing_page_source(self, url):
         try:
-            self.driver.delete_all_cookies()
-            self.driver.get('https://www.automobile.tn/fr/neuf/Volkswagen')
-            logger.info('Page loaded: %s', self.driver.current_url)
-            self.driver.delete_all_cookies()  # Clear cookies
-            time.sleep(20)
+            self.driver.get(url)
+            time.sleep(6)
         except WebDriverException:
             self.driver.refresh()
             time.sleep(5)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
-    #  def parsing_page_source(self, url):
-    #     try:
-    #         self.driver.get(url)
-    #         time.sleep(6)
-    #     except WebDriverException:
-    #         self.driver.refresh()
-    #         time.sleep(5)
-    #     return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
-    # def extract_cars_urls(self, pageUrl):
+    def extract_cars_urls(self, pageUrl):
         soup = self.parsing_page_source(pageUrl)
         atags = soup.find_all('a', {'class': 'occasion-link-overlay'})
         return [a.get('href')[12:] for a in atags]
@@ -136,26 +117,20 @@ class ScrapperAutomobileTnOcc:
 
 class ScrapperAutomobileTnNeuf:
 
-    def __init__(self):
-        self.scrapOcc =ScrapperAutomobileTnOcc()
-        self.driver = webdriver.Chrome()
-        self.baseUrl = 'https://www.automobile.tn/fr/neuf'
+    # def __init__(self):
+    #     self.scrapOcc =ScrapperAutomobileTnOcc()
+    #     self.driver = webdriver.Chrome()
+    #     self.baseUrl = 'https://www.automobile.tn/fr/neuf'
     def __init__(self):
         self.scrapOcc = ScrapperAutomobileTnOcc()
-        # options = webdriver.ChromeOptions()
-        # options.add_argument('--headless')  # Run in headless mode
-        # options.add_argument('--no-sandbox')
-        # options.add_argument('--disable-dev-shm-usage')
-        # options.add_argument('--disable-gpu')
-        # options.add_argument('--window-size=1920x1080')
-        # service = Service(ChromeDriverManager().install())
-        # self.driver = webdriver.Chrome(service=service, options=options)
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')  # Run in headless mode
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-gpu')
+        # options.add_argument("--disable-javascript")
         options.add_argument('--window-size=1920x1080')
+        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
         self.driver = webdriver.Chrome(options=options)
         self.baseUrl = 'https://www.automobile.tn/fr/neuf'
     def automobile_tn_columns_standardise(self, dataframe):
@@ -234,7 +209,7 @@ class ScrapperAutomobileTnNeuf:
                 soupBrandPage = self.scrapOcc.parsing_page_source(self.baseUrl + brandUrl)
                 listCarsUrls.extend(self.extract_cars_url(soupBrandPage))
             all_Data = {}
-            listTest = listCarsUrls[:50]
+            listTest = listCarsUrls[:20]
             print(listTest)
             for index, carUrl in enumerate(listTest, start=1):
                 soup = self.scrapOcc.parsing_page_source(self.baseUrl + carUrl)
