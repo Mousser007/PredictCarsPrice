@@ -44,7 +44,7 @@ class ScrapperAutomobileTnOcc:
     def parsing_page_source(self):
         try:
             self.driver.delete_all_cookies()
-            self.driver.get('https://www.automobile.tn/fr/neuf/audi')
+            self.driver.get('https://www.automobile.tn/fr/neuf/Volkswagen')
             logger.info('Page loaded: %s', self.driver.current_url)
             self.driver.delete_all_cookies()  # Clear cookies
             time.sleep(20)
