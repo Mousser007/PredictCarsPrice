@@ -7,14 +7,29 @@ from Cleaning.BrandModelExtraction import ExtractionMarqueModele
 import pandas as pd 
 from Cleaning.Cleaner import *
 from Config import *
+# import logging
+#
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger()
+
 
 class ScrapperAutomobileTnOcc:
     
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')  # Run in headless mode
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument("--disable-javascript")
+        options.add_argument('--window-size=1920x1080')
+        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+        self.driver = webdriver.Chrome(options=options)
         self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
-        self.pageInitiale = 1
-        self.pageFinale = 2
+        # self.driver = webdriver.Chrome()
+        # self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
+        # self.pageInitiale = 1
+        # self.pageFinale = 2
         
     def parsing_page_source(self, url):
         try:
@@ -102,9 +117,19 @@ class ScrapperAutomobileTnOcc:
 class ScrapperAutomobileTnNeuf:
 
     def __init__(self):
-        self.scrapOcc =ScrapperAutomobileTnOcc()
-        self.driver = webdriver.Chrome()
+        self.scrapOcc = ScrapperAutomobileTnOcc()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')  # Run in headless mode
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument("--disable-javascript")
+        options.add_argument('--window-size=1920x1080')
+        options.add_argument(
+            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+        self.driver = webdriver.Chrome(options=options)
         self.baseUrl = 'https://www.automobile.tn/fr/neuf'
+
     def automobile_tn_columns_standardise(self, dataframe):
         dataframe = dataframe.rename(columns={"Boîte": "BoiteVitesse",
                                               "Puissance fiscale": "PuissanceFiscale",
