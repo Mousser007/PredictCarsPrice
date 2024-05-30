@@ -5,11 +5,8 @@ from CleaningProcess import CleaningNewCars
 
 
 if __name__ == "__main__":
-    # test = ScrapperAutomobileTnNeuf()
-    test2 = ScrapperAutomobileTnOcc()
-    soup = test2.parsing_page_source()
-    print(soup)
-    # test.run_whole_process()
+    test = ScrapperAutomobileTnNeuf()
+    test.run_whole_process()
     # test = ScrappAutoPlusTnNeuf()
     # test.run_whole_process()
     # cleaningNewCars = CleaningNewCars()
