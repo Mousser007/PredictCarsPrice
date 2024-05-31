@@ -9,5 +9,6 @@ if __name__ == "__main__":
     # test.run_whole_process()
     # test = ScrappAutoPlusTnNeuf()
     # test.run_whole_process()
-    cleaningNewCars = CleaningNewCars()
-    cleaningNewCars.cleaning()
+    # cleaningNewCars = CleaningNewCars()
+    # cleaningNewCars.cleaning()
+    pass
