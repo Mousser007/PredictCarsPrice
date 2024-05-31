@@ -98,5 +98,6 @@ class CleaningNewCars:
 
 
 if __name__ == "__main__":
-    cleaningNewCars = CleaningNewCars()
-    cleaningNewCars.cleaning()
+    # cleaningNewCars = CleaningNewCars()
+    # cleaningNewCars.cleaning()
+    pass
