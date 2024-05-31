@@ -1,3 +1,5 @@
+import os
+
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
@@ -202,11 +204,11 @@ class ScrapperAutomobileTnNeuf:
         soupBaseUrl = self.scrapOcc.parsing_page_source(self.baseUrl)
         listBrandsUrls = self.extract_brands_url(soupBaseUrl)
         try:
-            for brandUrl in listBrandsUrls:
+            for brandUrl in listBrandsUrls[:5]:
                 soupBrandPage = self.scrapOcc.parsing_page_source(self.baseUrl + brandUrl)
                 listCarsUrls.extend(self.extract_cars_url(soupBrandPage))
             all_Data = {}
-            for index, carUrl in enumerate(listCarsUrls, start=1):
+            for index, carUrl in enumerate(listCarsUrls[:7], start=1):
                 soup = self.scrapOcc.parsing_page_source(self.baseUrl + carUrl)
                 if soup.find('table', {'class': 'versions'}):
                     listeDesVersion = self.ExtractVersionList(soup)
@@ -228,6 +230,7 @@ class ScrapperAutomobileTnNeuf:
                                       "AutomobileTnFilePostScrap")
         AutomobileTnData = pd.read_csv(data_directory + '.csv', sep=',')
         AutomobileTnDataPostStandardise = self.automobile_tn_columns_standardise(AutomobileTnData)
+        os.makedirs(path_to_DataPostColumnsStandardisedNeuf, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedNeuf,
                                       "AutomobileTnFilePostColumnsStandardised")
         AutomobileTnDataPostStandardise.to_csv(data_directory + ".csv")

@@ -171,10 +171,10 @@ class ScrappAutoPlusTnNeuf:
         soupBaseUrl = self.scrapOcc.parsing_page_source(baseUrl)
         listBrandsUrls = self.extract_brands_url(soupBaseUrl)
         try:
-            for brandUrl in listBrandsUrls:
+            for brandUrl in listBrandsUrls[:5]:
                 soupBrandPage = self.scrapOcc.parsing_page_source(baseUrl + brandUrl)
                 listCarsUrls.extend(self.extract_cars_url(soupBrandPage))
-            for index, carUrl in enumerate(listCarsUrls[:10], start=1):
+            for index, carUrl in enumerate(listCarsUrls[:8], start=1):
                 soup = self.scrapOcc.parsing_page_source(baseUrl + carUrl)
                 if soup.find('div', {'class': 'list_finition'}):
                     listeDesVersion = self.ExtractVersionList(soup)

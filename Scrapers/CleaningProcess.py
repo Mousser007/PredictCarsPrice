@@ -94,6 +94,7 @@ class CleaningNewCars:
         data_merged = self.cln.nettoyer_carrosserie(data_merged)
         data_merged = self.cln.nettoyer_modele_voiture_neuf(data_merged)
         data_merged = data_merged.dropna(subset=['NombreDePlaces', 'NombreDePortes'])
+        os.makedirs(path_to_NewCarsReady, exist_ok=True)
         data_merged.to_excel(path_to_NewCarsReady + "\\testMergeNeuf.xlsx")
 
 
