@@ -28,10 +28,10 @@ class ScrappAutoPlusTnOccasion:
     def parsing_page_source(self, url: str):
         try:
             self.driver.get(url)
-            time.sleep(4)
+            time.sleep(20)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(2)
+            time.sleep(20)
         return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None
     
     def nextPage(self, soup):
@@ -142,7 +142,7 @@ class ScrappAutoPlusTnNeuf:
 
     def extract_data(self, soup):
         data = {}
-        description = soup.find('div', {'class': 'marq_header clearfix'}).text.strip()
+        description = soup.find('div', {'class': 'marq_header clearfix'}).text.strip() if soup.find('div', {'class': 'marq_header clearfix'}) else None
         prix = soup.find('div', {'class': 'prix_marge'}).b.text.strip().replace("\u202f", "") if soup.find('div', {
             'class': 'prix_marge'}).b else None
         atags = soup.find('div', {'class': 'panel-group panel-group-lists', 'id': 'accordion2'})
