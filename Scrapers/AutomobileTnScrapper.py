@@ -160,7 +160,7 @@ class ScrapperAutomobileTnNeuf:
 
     def extract_data(self, soup):
         data = {}
-        description = soup.find('h3', {'class': 'page-title'}).text.strip()
+        description = soup.find('h3', {'class': 'page-title'}).text.strip() if soup.find('h3', {'class': 'page-title'}).text.strip() else None
         prix = soup.find('div', {'class': 'buttons'}).span.text.strip() if soup.find('div',
                                                                             {'class': 'buttons'}) else None
         atags = soup.find('div', {'class': 'technical-details'})
@@ -206,7 +206,7 @@ class ScrapperAutomobileTnNeuf:
                 soupBrandPage = self.scrapOcc.parsing_page_source(self.baseUrl + brandUrl)
                 listCarsUrls.extend(self.extract_cars_url(soupBrandPage))
             all_Data = {}
-            for index, carUrl in enumerate(listCarsUrls[:20], start=1):
+            for index, carUrl in enumerate(listCarsUrls[:10], start=1):
                 soup = self.scrapOcc.parsing_page_source(self.baseUrl + carUrl)
                 if soup.find('table', {'class': 'versions'}):
                     listeDesVersion = self.ExtractVersionList(soup)
