@@ -82,7 +82,9 @@ class CleaningNewCars:
         self.cln = cleaner()
 
     def cleaning(self):
-        data_merged = self.importer.merge_csv_files(path_to_DataPostColumnsStandardisedNeuf + '\\')
+        # data_merged = self.importer.merge_csv_files(path_to_DataPostColumnsStandardisedNeuf + '\\') en windows
+        data_merged = self.importer.merge_csv_files(path_to_DataPostColumnsStandardisedNeuf)
+
         data_merged = self.importer.removeUnnamed(data_merged)
         # data_merged = data_merged.drop(columns=['description'])
         print(data_merged)
