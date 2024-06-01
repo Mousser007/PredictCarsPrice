@@ -32,10 +32,10 @@ class ScrappOccasionAffareTn:
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(4)
+            time.sleep(20)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(4)
+            time.sleep(20)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def nbre_de_page(self, soup):
