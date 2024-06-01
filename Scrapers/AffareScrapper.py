@@ -1,5 +1,3 @@
-#import sys
-#sys.path.append('D:\\PredictCarsPrice')
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
@@ -12,6 +10,8 @@ import pandas as pd
 import os
 from Cleaning.Cleaner import *
 from Config import *
+import CleaningProcess
+
 
 class ScrappOccasionAffareTn:
 
@@ -26,7 +26,7 @@ class ScrappOccasionAffareTn:
             time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(2)
+            time.sleep(4)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def nbre_de_page(self, soup):
@@ -65,7 +65,8 @@ class ScrappOccasionAffareTn:
         soup = self.parsing_page_source(self.baseUrl)
         nbreDePage= self.nbre_de_page(soup)
         listeDesVoitures=[]
-        for i in range(nbreDePage+1):
+        # for i in range(nbreDePage+1):
+        for i in range(2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:94]+str(i)+self.baseUrl[95:]))
         try:
             for index, voiture in enumerate(listeDesVoitures, start=1):
@@ -101,18 +102,17 @@ class ScrappOccasionAffareTn:
         return dataframe
 
     def run_whole_process(self):
-        self.affare_scrapper_runner("AffareFilePostScrap")
-        data_directory = os.path.join(path_to_DataPostScraping,"Affare", "AffareFilePostScrap")
-        AffareFile = pd.read_csv(data_directory + '.csv')
+        self.affare_scrapper_runner("AffareFilePostScrapTest")
+        data_directory = os.path.join(path_to_DataPostScraping, "Affare", "AffareFilePostScrapTest.csv")
+        AffareFile = pd.read_csv(data_directory)
         AffareData = self.affare_columns_standardise(AffareFile)
-        data_directory = os.path.join(path_to_DataPostCleaning,"Affare", "AffareFilePostClean")
-        AffareData.to_csv(data_directory + ".csv")
+        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AffareFilePostColumnStandardised.xlsx")
+        AffareData.to_excel(data_directory)
 
 
 if __name__ == "__main__":
-    pass
     # test = ScrappOccasionAffareTn()
-    # # # affare.run_whole_process()
-    # affare = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AffareTn\\AffareTnOcc.csv")
-    # affarepostCleaning = test.affare_columns_standardise(affare)
-    # affarepostCleaning.to_excel("C:\\Users\\Mousser\\Desktop\\testaffare.xlsx")
+    # test.run_whole_process()
+    # Phase cleaning
+    test = CleaningProcess.CleaningUseCars()
+    test.cleaning()

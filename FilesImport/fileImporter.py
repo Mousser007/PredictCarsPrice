@@ -24,7 +24,7 @@ class Importer:
         listFileName=[f for f in os.listdir(dossierPath) if f.endswith('.csv')]
         listDataframe = []
         for file in listFileName:
-            df = pd.read_csv(dossierPath+file)
+            df = pd.read_csv(dossierPath+file, sep=';')
             listDataframe.append(df)
         finalDataFrame = pd.concat(listDataframe)
         return finalDataFrame

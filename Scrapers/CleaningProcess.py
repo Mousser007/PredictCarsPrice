@@ -14,17 +14,19 @@ from Config import *
 
 class CleaningUseCars:
     def __init__(self):
-        pass
+        self.importer = fileImporter.Importer()
+        self.cln = cleaner()
+
     # def testPipeline(self):
     #     # Nettoyage des données phase 1
     #     imp = Importer()
     #     ParentPath = os.path.dirname(os.getcwd())
     #     destination = os.path.join(ParentPath, 'Data', 'DataPostCleaning')
-    #     # # Affare
-    #     # testAffare = ScrappOccasionAffareTn()
-    #     # affarePostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AffareTn\\AffareTnOcc.csv")
-    #     # affarePostCleaning = testAffare.affare_columns_standardise(affarePostScrapping)
-    #     # affarePostCleaning.to_excel(destination + '\\' + "affarePostCleaning.xlsx")
+        # Affare
+        # testAffare = ScrappOccasionAffareTn()
+        # affarePostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AffareTn\\AffareTnOcc.csv")
+        # affarePostCleaning = testAffare.affare_columns_standardise(affarePostScrapping)
+        # affarePostCleaning.to_excel(destination + '\\' + "affarePostCleaning.xlsx")
     #     # # AutoMax
     #     # testAutomax = ScrappOccasionAutoMaxTn()
     #     # automaxPostScrapping = pd.read_excel("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutoMaxTn\\AutoMaxTnOcc.xlsx")
@@ -54,26 +56,26 @@ class CleaningUseCars:
     #     # TayaraTnPostCleaning = testTayaraTn.tayara_columns_standardise(TayaraTnPostScrapping)
     #     # TayaraTnPostCleaning.to_excel(destination + '\\' + "TayaraTnPostCleaning.xlsx")
     #
-    #     # Nettoyage des données phase 2
-    #     cln = cleaner()
-    #     dataframe = imp.merge_excel_files(destination + "\\")
-    #     dataframe = cln.eliminate_unnamed_columns(dataframe)
-    #     dataframe.to_csv(destination + '\\' + "data3.csv", sep=';')
-    #     dataframe = pd.read_csv(destination + '\\' + "data3.csv", sep=';', index_col=0)
-    #     dataframe = cln.nettoyer_marque(dataframe)
-    #     dataframe = cln.nettoyer_modele(dataframe)
-    #     dataframe = cln.nettoyer_col_annee(dataframe)
-    #     dataframe = cln.nettoyer_boite_vitesse(dataframe)
-    #     dataframe = cln.nettoyer_energie(dataframe)
-    #     dataframe = cln.nettoyer_puissance_fiscale(dataframe)
-    #     dataframe = cln.nettoyer_col_kilometrage(dataframe)
-    #     dataframe = cln.nettoyer_prix(dataframe)
-    #     dataframe = cln.nettoyer_couleur(dataframe)
-    #     dataframe = cln.nettoyer_carrosserie(dataframe)
-    #     dataframe.drop_duplicates(inplace = True)
-    #     dataframe.drop_duplicates(inplace=True)
-    #     dataframe.to_excel(destination + '\\' + 'data3.xlsx')
-    #     return 'nothing'
+        # Nettoyage des données phase 2
+    def cleaning(self):
+        dataframe = self.importer.merge_excel_files(os.path.join(path_to_DataPostColumnsStandardisedOccasion, ""))
+        dataframe = self.cln.eliminate_unnamed_columns(dataframe)
+        dataframe.to_excel(os.path.join(path_to_DataPostCleaning, "dataMerged.xlsx"))
+        # dataframe = pd.read_csv(destination + '\\' + "data3.csv", sep=';', index_col=0)
+        dataframe = self.cln.nettoyer_marque(dataframe)
+        dataframe = self.cln.nettoyer_modele(dataframe)
+        dataframe = self.cln.nettoyer_col_annee(dataframe)
+        dataframe = self.cln.nettoyer_boite_vitesse(dataframe)
+        dataframe = self.cln.nettoyer_energie(dataframe)
+        dataframe = self.cln.nettoyer_puissance_fiscale(dataframe)
+        dataframe = self.cln.nettoyer_col_kilometrage(dataframe)
+        dataframe = self.cln.nettoyer_prix(dataframe)
+        # dataframe = self.cln.nettoyer_couleur(dataframe)
+        # dataframe = self.cln.nettoyer_carrosserie(dataframe)
+        dataframe.drop_duplicates(inplace=True)
+        dataframe.drop_duplicates(inplace=True)
+        dataframe.to_csv(os.path.join(path_to_DataPostCleaning, 'dataMergedAndCleaned.csv'), sep=';')
+        return dataframe
 
 class CleaningNewCars:
 

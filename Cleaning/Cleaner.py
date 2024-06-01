@@ -3,7 +3,7 @@ import datetime
 
 class cleaner: 
     
-    def __init__(self) -> None:
+    def __init__(self):
         pass
 
     def eliminate_unnamed_columns(self, dataframe):
