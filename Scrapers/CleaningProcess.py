@@ -60,6 +60,7 @@ class CleaningUseCars:
     def cleaning(self):
         dataframe = self.importer.merge_excel_files(os.path.join(path_to_DataPostColumnsStandardisedOccasion, ""))
         dataframe = self.cln.eliminate_unnamed_columns(dataframe)
+        os.makedirs(path_to_DataPostCleaning, exist_ok=True)
         dataframe.to_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';')
         dataframe = pd.read_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';', index_col=0)
         dataframe = self.cln.nettoyer_marque(dataframe)
@@ -86,7 +87,6 @@ class CleaningNewCars:
     def cleaning(self):
         # data_merged = self.importer.merge_csv_files(path_to_DataPostColumnsStandardisedNeuf + '\\') en windows
         data_merged = self.importer.merge_csv_files(os.path.join(path_to_DataPostColumnsStandardisedNeuf,''))
-
         data_merged = self.importer.removeUnnamed(data_merged)
         # data_merged = data_merged.drop(columns=['description'])
         print(data_merged)

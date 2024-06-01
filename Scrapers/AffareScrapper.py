@@ -88,6 +88,7 @@ class ScrappOccasionAffareTn:
     
     def affare_scrapper_runner(self, OutputFileName):
         standardize = ColumnsStandardiser()
+        os.makedirs(os.path.join(path_to_DataPostScraping, 'Affare'), exist_ok=True)
         data_directory = os.path.join(path_to_DataPostScraping, "Affare")
         file_path = os.path.join(data_directory, OutputFileName + '.csv')
         data = self.scrape()

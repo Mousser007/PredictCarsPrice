@@ -73,7 +73,8 @@ class ScrapperAutomobileTnOcc:
     def scrape(self, pageInit, pageFinal):
         urls=[]
         try:
-            for i in range(pageInit,pageFinal+1):
+            # for i in range(pageInit,pageFinal+1):
+            for i in range(2):
                 urls.extend(self.extract_cars_urls(self.baseUrl+'/'+str(i)+'?sort=date'))
             all_Data={}
             for index, url in enumerate(urls, start = 1):
@@ -88,6 +89,7 @@ class ScrapperAutomobileTnOcc:
         standardize = ColumnsStandardiser()
         data = self.scrape(self.pageInitiale, self.pageFinale)
         dataStandardized = standardize.column_standardize(data)
+        os.makedirs(os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion'), exist_ok=True)
         file_path = os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion', OutputFileName + '.csv' )
         standardize.load_data_in_csv_file(dataStandardized, file_path)
     
@@ -109,7 +111,7 @@ class ScrapperAutomobileTnOcc:
     def run_whole_process(self):
         self.pageInitiale = 1
         self.pageFinale = 2
-        # self.automobile_tn_scrapper_runner("FileAutomobileTnPostScrapTest")
+        self.automobile_tn_scrapper_runner("FileAutomobileTnPostScrapTest")
         os.makedirs(os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion'), exist_ok=True)
         file_path = os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion', 'FileAutomobileTnPostScrapTest.csv')
         AutomobileTnFile = pd.read_csv(file_path)

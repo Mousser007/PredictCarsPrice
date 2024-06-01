@@ -83,6 +83,7 @@ class ScrappAutoPrixOccasion:
     
     def auto_prix_scrapper_runner(self, OutputFileName):
         standardize = ColumnsStandardiser()
+        os.makedirs(os.path.join(path_to_DataPostScraping, 'AutoPrix'), exist_ok=True)
         data_directory = os.path.join(path_to_DataPostScraping, "AutoPrix")
         file_path = os.path.join(data_directory, OutputFileName + '.csv')
         data = self.scrape(self.PageInitiale, self.PageFinale)

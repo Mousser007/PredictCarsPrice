@@ -86,6 +86,7 @@ class ScrappOccasionAutoMaxTn:
     
     def auto_max_scrapper_runner(self, OutputFileName):
         standardize = ColumnsStandardiser()
+        os.makedirs(os.path.join(path_to_DataPostScraping, 'AutoMax'), exist_ok=True)
         data_directory = os.path.abspath(os.path.join(path_to_DataPostScraping, "AutoMax"))
         file_path = os.path.join(data_directory, OutputFileName + '.csv')
         data = self.scrape()
