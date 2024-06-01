@@ -16,15 +16,15 @@ class ScrappOccasionAutoMaxTn:
     def __init__(self):
         self.driver = webdriver.Chrome()
         self.baseUrl = "https://www.automax.tn/voitures-occasion/?prix-from=3000&page=1&trier-par=recent"
-        self.nativeUrl = "https://www.affare.tn"
+        self.nativeUrl = "https://www.automax.tn"
 
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(4)
+            time.sleep(7)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(2)
+            time.sleep(7)
         return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None
     
     def nbre_de_page(self, soup):
@@ -63,12 +63,13 @@ class ScrappOccasionAutoMaxTn:
         soup = self.parsing_page_source(self.baseUrl)
         nbreDePage= self.nbre_de_page(soup)
         listeDesVoitures=[]
-        for i in range(nbreDePage+1):
+        # for i in range(nbreDePage+1):
+        for i in range(2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:62] + str(i) + self.baseUrl[63:]))
         try:
             
             for index, voiture in enumerate(listeDesVoitures, start = 1):
-                soup = self.parsing_page_source(self.nativeUrl + voiture)
+                soup = self.parsing_page_source(voiture)
                 data = self.extract_data(soup)
                 all_Data[f'dict{index}']=data
                 
@@ -112,18 +113,18 @@ class ScrappOccasionAutoMaxTn:
         return dataframe
     
     def run_whole_process(self):
-        self.auto_max_scrapper_runner("FileAutoMaxPostScrap")
-        data_directory = os.path.join(path_to_DataPostScraping, "AutoMax", "FileAutoMaxPostScrap")
-        AutoMaxFile = pd.read_csv(data_directory + '.csv')
+        self.auto_max_scrapper_runner("FileAutoMaxPostScrapTest")
+        data_directory = os.path.join(path_to_DataPostScraping, "AutoMax", "FileAutoMaxPostScrapTest.csv")
+        AutoMaxFile = pd.read_csv(data_directory)
         AutoMaxData = self.auto_max_columns_standardise(AutoMaxFile)
-        data_directory = os.path.join(path_to_DataPostCleaning, "AutoMax", "FileAutoMaxPostClean")
-        AutoMaxData.to_csv(data_directory + ".csv")
+        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "FileAutoMaxPostColumnStandardised.xlsx")
+        AutoMaxData.to_excel(data_directory)
 
 
 ## MAIN ##
 if __name__ == "__main__":
-    AutoMax = ScrappOccasionAutoMaxTn()
-    AutoMax.run_whole_process()
-
+    # AutoMax = ScrappOccasionAutoMaxTn()
+    # AutoMax.run_whole_process()
+    pass
 
 

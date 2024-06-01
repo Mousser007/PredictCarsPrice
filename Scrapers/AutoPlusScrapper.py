@@ -28,10 +28,10 @@ class ScrappAutoPlusTnOccasion:
     def parsing_page_source(self, url: str):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(20)
+            time.sleep(4)
         return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None
     
     def nextPage(self, soup):
@@ -69,7 +69,8 @@ class ScrappAutoPlusTnOccasion:
         nbreDannonce = int(soup.find('span', {'class': 'total'}).text.strip()[:-23])
         nbreDePage = ceil(nbreDannonce/10)
         listeDesVoitures = []
-        for i in range(1, nbreDePage+1):
+        # for i in range(1, nbreDePage+1):
+        for i in range(2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:len(self.baseUrl)-1]+str(i))) 
         try:
             
@@ -105,13 +106,12 @@ class ScrappAutoPlusTnOccasion:
         return dataframe  
       
     def run_whole_process(self):
-        self.auto_plus_scrapper_runner('AutoPlusFilePostScrap')
-        script_directory = os.path.dirname(os.path.abspath(__file__))
-        data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus", "AutoPlusFilePostScrap")
-        AutoPlusData= pd.read_csv(data_directory + '.csv', sep=';')
-        AutoPlusDataPostStandardise = self.auto_plus_columns_standardise(AutoPlusData)
-        data_directory =os.path.join(path_to_DataPostCleaning, "AutoPlus", "AutoPlusFilePostClean")
-        AutoPlusDataPostStandardise.to_csv(data_directory + ".csv")
+        self.auto_plus_scrapper_runner('AutoPlusFilePostScrapTest')
+        data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus", "AutoPlusFilePostScrapTest.csv")
+        AutoPlusData= pd.read_csv(data_directory)
+        AutoPlusDataPostStandardise= self.auto_plus_columns_standardise(AutoPlusData)
+        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutoPlusFileColumnStandardised.xlsx")
+        AutoPlusDataPostStandardise.to_excel(data_directory)
 
 
 class ScrappAutoPlusTnNeuf:
@@ -158,7 +158,6 @@ class ScrappAutoPlusTnNeuf:
     def ExtractVersionList(self, soup):
         listeBaliseALinkFini = soup.find_all('a', {'class': 'linkfini'})
         href_list = []
-
         for a in listeBaliseALinkFini:
             version_link = a.get('href')
             href_list.append(version_link)

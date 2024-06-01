@@ -28,7 +28,7 @@ class ScrappOccasionTayaraTn:
             time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(2)
+            time.sleep(4)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def nbre_de_page(self, soup):
@@ -71,7 +71,8 @@ class ScrappOccasionTayaraTn:
     def scrape(self, PageInitiale, PageFinale):
         all_Data = {}
         listeDesVoitures = []
-        for i in range(PageInitiale, PageFinale+1):
+        # for i in range(PageInitiale, PageFinale+1):
+        for i in range(2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:104]+str(i)))
         try:
             for index, voiture in enumerate(listeDesVoitures, start=1):
@@ -126,19 +127,20 @@ class ScrappOccasionTayaraTn:
         return dataframe
     
     def run_whole_process(self):
-        self.tayara_scrapper_runner('TayaraFilePostScrap')
+        # self.tayara_scrapper_runner('TayaraFilePostScrapTest')
         ## S'il y a plusieurs files csv qui viennent du scrapping du site tayara il faut utiliser la methode merge_csv_files du module fileImporter
-        data_directory = os.path.join(path_to_DataPostScraping, "Tayara", "TayaraFilePostScrap")
-        tayaraFile = pd.read_csv(data_directory + ".csv")
+        data_directory = os.path.join(path_to_DataPostScraping, "Tayara", "TayaraFilePostScrapTest.csv")
+        tayaraFile = pd.read_csv(data_directory)
         tayaraData = self.tayara_columns_standardise(tayaraFile)
-        data_directory = os.path.join(path_to_DataPostCleaning, "FileTayaraPostClean" )
-        tayaraData.to_csv(data_directory + ".csv")
+        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "FileTayaraPostColumnStandardised.xlsx" )
+        tayaraData.to_excel(data_directory)
 
 
 ##MAIN##
 if __name__ == "__main__":
-    pass
+
     # tayara = ScrappOccasionTayaraTn()
     # tayara.pageInitiale = 1
     # tayara.pageFinale = 1
     # tayara.run_whole_process()
+    pass

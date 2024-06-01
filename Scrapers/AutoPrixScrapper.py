@@ -27,7 +27,7 @@ class ScrappAutoPrixOccasion:
             time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(2)
+            time.sleep(4)
         return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def extract_cars_urls(self, pageUrl):
@@ -60,7 +60,8 @@ class ScrappAutoPrixOccasion:
         all_Data = {}
         # soup = self.parsing_page_source(baseUrl)
         listeDesVoitures=[]
-        for i in range(pageInitiale,pageFinale+1):
+        # for i in range(pageInitiale,pageFinale+1):
+        for i in range(2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:69]+str(i)+self.baseUrl[70:]))
         try:
             for index, voiture in enumerate(listeDesVoitures, start=1):
@@ -96,18 +97,18 @@ class ScrappAutoPrixOccasion:
         return dataframe
     
     def run_whole_process(self):
-        self.auto_prix_scrapper_runner("AutoPrixFilePostScrap")
-        data_directory =os.path.join(path_to_DataPostScraping, "AutoPrix", "AutoPrixFilePostScrap")
-        autoPrixFile = pd.read_csv(data_directory + '.csv')
-        data_directory =os.path.join(path_to_DataPostCleaning, "AutoPrix","AutoPrixFilePostClean")
+        self.auto_prix_scrapper_runner("AutoPrixFilePostScrapTest")
+        data_directory = os.path.join(path_to_DataPostScraping, "AutoPrix", "AutoPrixFilePostScrapTest.csv")
+        autoPrixFile = pd.read_csv(data_directory)
         autoPrixData = self.auto_prix_columns_standardise(autoPrixFile)
-        autoPrixData.to_csv(data_directory + ".csv")
+        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutoPrixFilePostColumnStandardised.xlsx")
+        autoPrixData.to_excel(data_directory)
 
 
 ## MAIN ##
 if __name__ == "__main__":
-    autoPrixScrapper = ScrappAutoPrixOccasion()
-    autoPrixScrapper.PageInitiale = 1
-    autoPrixScrapper.PageFinale = 2
-    autoPrixScrapper.run_whole_process()     
-
+    # autoPrixScrapper = ScrappAutoPrixOccasion()
+    # autoPrixScrapper.PageInitiale = 1
+    # autoPrixScrapper.PageFinale = 2
+    # autoPrixScrapper.run_whole_process()
+    pass

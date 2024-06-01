@@ -30,16 +30,16 @@ class ScrapperAutomobileTnOcc:
         self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
         # self.driver = webdriver.Chrome()
         # self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
-        # self.pageInitiale = 1
-        # self.pageFinale = 2
+        self.pageInitiale = 1
+        self.pageFinale = 2
         
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(20)
+            time.sleep(4)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def extract_cars_urls(self, pageUrl):
@@ -92,16 +92,16 @@ class ScrapperAutomobileTnOcc:
         standardize.load_data_in_csv_file(dataStandardized, file_path)
     
     def automobile_tn_columns_standardise(self, dataframe):
-        # il faut recoder cette methode car elle comporte des erreur au niveau du modele et modéle
-        # supp modele et renommer modéle en modele en faisant le necessaire
-        dataframe= dataframe.rename(columns={"Kilométrage":"Kilometrage",
-                                             "Mise en circulation":"Annee",
-                                             "Énergie":"Energie" ,
-                                             "Boite vitesse":"BoiteVitesse",
-                                             "Puissance fiscale":"PuissanceFiscale",
-                                             "Couleur extérieure":"Couleur"})
-        dataframe = dataframe.drop(columns={"Couleur intérieure", "Date de l'annonce",
-                                            "Nombre de places","Nombre de portes","Transmission","Sellerie"})
+        dataframe= dataframe.rename(columns={"Kilométrage": "Kilometrage",
+                                             "Mise en circulation": "Annee",
+                                             "Énergie": "Energie",
+                                             "Boite vitesse": "BoiteVitesse",
+                                             "Puissance fiscale": "PuissanceFiscale",
+                                             "Couleur extérieure": "Couleur"})
+        # dataframe = dataframe.drop(columns={"Couleur intérieure", "Date de l'annonce",
+        #                                     "Nombre de places", "Nombre de portes", "Transmission", "Sellerie","Modele"})
+        dataframe = dataframe[['Kilometrage','Annee','Energie','BoiteVitesse','PuissanceFiscale','Couleur','Marque','Modèle','Prix']]
+        dataframe = dataframe.rename(columns={"Modèle":"Modele"})
         cln = cleaner()
         dataframe = cln.eliminate_unnamed_columns(dataframe)
         return dataframe
@@ -109,11 +109,12 @@ class ScrapperAutomobileTnOcc:
     def run_whole_process(self):
         self.pageInitiale = 1
         self.pageFinale = 2
-        self.automobile_tn_scrapper_runner("FileAutomobileTnPostScrap")
-        file_path = os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion', 'FileAutomobileTnPostScrap.csv')
-        AutomobileTnFile = pd.read_csv(file_path,sep=';')
+        # self.automobile_tn_scrapper_runner("FileAutomobileTnPostScrapTest")
+        file_path = os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion', 'FileAutomobileTnPostScrapTest.csv')
+        AutomobileTnFile = pd.read_csv(file_path)
         AutomobileTnData = self.automobile_tn_columns_standardise(AutomobileTnFile)
-        AutomobileTnData.to_csv(path_to_DataPostCleaning+"\\FileAutomobileTnClean.csv")
+        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutomobileTnFilePostColumnStandardised.xlsx")
+        AutomobileTnData.to_excel(data_directory)
 
 
 class ScrapperAutomobileTnNeuf:

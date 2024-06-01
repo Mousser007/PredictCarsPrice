@@ -60,8 +60,8 @@ class CleaningUseCars:
     def cleaning(self):
         dataframe = self.importer.merge_excel_files(os.path.join(path_to_DataPostColumnsStandardisedOccasion, ""))
         dataframe = self.cln.eliminate_unnamed_columns(dataframe)
-        dataframe.to_excel(os.path.join(path_to_DataPostCleaning, "dataMerged.xlsx"))
-        # dataframe = pd.read_csv(destination + '\\' + "data3.csv", sep=';', index_col=0)
+        dataframe.to_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';')
+        dataframe = pd.read_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';', index_col=0)
         dataframe = self.cln.nettoyer_marque(dataframe)
         dataframe = self.cln.nettoyer_modele(dataframe)
         dataframe = self.cln.nettoyer_col_annee(dataframe)
@@ -74,7 +74,7 @@ class CleaningUseCars:
         # dataframe = self.cln.nettoyer_carrosserie(dataframe)
         dataframe.drop_duplicates(inplace=True)
         dataframe.drop_duplicates(inplace=True)
-        dataframe.to_csv(os.path.join(path_to_DataPostCleaning, 'dataMergedAndCleaned.csv'), sep=';')
+        dataframe.to_csv(os.path.join(path_to_DataPostCleaning, 'dataMergedAndCleaned.csv'),sep=';')
         return dataframe
 
 class CleaningNewCars:

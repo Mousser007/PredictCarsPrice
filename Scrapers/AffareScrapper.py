@@ -114,5 +114,6 @@ if __name__ == "__main__":
     # test = ScrappOccasionAffareTn()
     # test.run_whole_process()
     # Phase cleaning
-    test = CleaningProcess.CleaningUseCars()
-    test.cleaning()
+    # test = CleaningProcess.CleaningUseCars()
+    # test.cleaning()
+    pass
