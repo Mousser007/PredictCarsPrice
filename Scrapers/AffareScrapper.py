@@ -16,7 +16,16 @@ import CleaningProcess
 class ScrappOccasionAffareTn:
 
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')  # Run in headless mode
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument("--disable-javascript")
+        options.add_argument('--window-size=1920x1080')
+        options.add_argument(
+            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+        self.driver = webdriver.Chrome(options=options)
         self.baseUrl = "https://www.affare.tn/petites-annonces/tunisie/voiture-neuve-occassion-prix-tayara-a-vendre?o=1&t=prix-moins-cher&prix=3000-max"
         self.nativeUrl = "https://www.affare.tn"
         
@@ -103,9 +112,11 @@ class ScrappOccasionAffareTn:
 
     def run_whole_process(self):
         self.affare_scrapper_runner("AffareFilePostScrapTest")
+        os.makedirs(os.path.join(path_to_DataPostScraping, "Affare"), exist_ok=True)
         data_directory = os.path.join(path_to_DataPostScraping, "Affare", "AffareFilePostScrapTest.csv")
         AffareFile = pd.read_csv(data_directory)
         AffareData = self.affare_columns_standardise(AffareFile)
+        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AffareFilePostColumnStandardised.xlsx")
         AffareData.to_excel(data_directory)
 

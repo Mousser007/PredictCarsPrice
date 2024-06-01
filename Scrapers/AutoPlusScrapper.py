@@ -107,9 +107,11 @@ class ScrappAutoPlusTnOccasion:
       
     def run_whole_process(self):
         self.auto_plus_scrapper_runner('AutoPlusFilePostScrapTest')
+        os.makedirs(os.path.join(path_to_DataPostScraping, "AutoPlus"), exist_ok=True)
         data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus", "AutoPlusFilePostScrapTest.csv")
         AutoPlusData= pd.read_csv(data_directory)
         AutoPlusDataPostStandardise= self.auto_plus_columns_standardise(AutoPlusData)
+        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutoPlusFileColumnStandardised.xlsx")
         AutoPlusDataPostStandardise.to_excel(data_directory)
 
@@ -215,9 +217,11 @@ class ScrappAutoPlusTnNeuf:
 
     def run_whole_process(self):
         self.auto_plus_scrapper_runner('AutoPlusFilePostScrap')
+        os.makedirs(os.path.join(path_to_DataPostScraping, "AutoPlus", "Neuf"), exist_ok=True)
         data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus", "Neuf", "AutoPlusFilePostScrap")
         AutoPlusData = pd.read_csv(data_directory + '.csv',sep=',')
         AutoPlusDataPostStandardise = self.auto_plus_columns_standardise(AutoPlusData)
+        os.makedirs(path_to_DataPostColumnsStandardisedNeuf, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedNeuf, "AutoPlusFilePostColumnsStandardised")
         AutoPlusDataPostStandardise.to_csv(data_directory + ".csv")
 

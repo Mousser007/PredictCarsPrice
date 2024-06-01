@@ -1,5 +1,3 @@
-#import sys
-#sys.path.append('D:\\PredictCarsPrice')
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
@@ -16,7 +14,16 @@ from Config import *
 class ScrappOccasionTayaraTn:
 
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')  # Run in headless mode
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument("--disable-javascript")
+        options.add_argument('--window-size=1920x1080')
+        options.add_argument(
+            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+        self.driver = webdriver.Chrome(options=options)
         self.baseUrl = "https://www.tayara.tn/ads/c/V%C3%A9hicules/Voitures/t/Occasion/?minPrice=10000&maxPrice=1000000000&page=1"
         self.nativeUrl = "https://www.tayara.tn"
         self.pageInitiale = 1
@@ -128,10 +135,12 @@ class ScrappOccasionTayaraTn:
     
     def run_whole_process(self):
         # self.tayara_scrapper_runner('TayaraFilePostScrapTest')
+        os.makedirs(os.path.join(path_to_DataPostScraping, "Tayara"), exist_ok=True)
         ## S'il y a plusieurs files csv qui viennent du scrapping du site tayara il faut utiliser la methode merge_csv_files du module fileImporter
         data_directory = os.path.join(path_to_DataPostScraping, "Tayara", "TayaraFilePostScrapTest.csv")
         tayaraFile = pd.read_csv(data_directory)
         tayaraData = self.tayara_columns_standardise(tayaraFile)
+        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "FileTayaraPostColumnStandardised.xlsx" )
         tayaraData.to_excel(data_directory)
 

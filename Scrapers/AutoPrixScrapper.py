@@ -15,7 +15,16 @@ from Config import *
 class ScrappAutoPrixOccasion:
 
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')  # Run in headless mode
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument("--disable-javascript")
+        options.add_argument('--window-size=1920x1080')
+        options.add_argument(
+            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+        self.driver = webdriver.Chrome(options=options)
         self.baseUrl = "https://www.autoprix.tn/recherche?min_price=4000&max_price=200000&cp=1&sortby=date&is_sold=true&is_price=true&nb=1"
         self.nativeUrl = "https://www.autoprix.tn"
         self.PageInitiale = 1
@@ -98,9 +107,11 @@ class ScrappAutoPrixOccasion:
     
     def run_whole_process(self):
         self.auto_prix_scrapper_runner("AutoPrixFilePostScrapTest")
+        os.makedirs(os.path.join(path_to_DataPostScraping, "AutoPrix"), exist_ok=True)
         data_directory = os.path.join(path_to_DataPostScraping, "AutoPrix", "AutoPrixFilePostScrapTest.csv")
         autoPrixFile = pd.read_csv(data_directory)
         autoPrixData = self.auto_prix_columns_standardise(autoPrixFile)
+        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutoPrixFilePostColumnStandardised.xlsx")
         autoPrixData.to_excel(data_directory)
 

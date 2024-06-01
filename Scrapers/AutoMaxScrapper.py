@@ -14,7 +14,16 @@ from Config import *
 class ScrappOccasionAutoMaxTn:
 
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')  # Run in headless mode
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument("--disable-javascript")
+        options.add_argument('--window-size=1920x1080')
+        options.add_argument(
+            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+        self.driver = webdriver.Chrome(options=options)
         self.baseUrl = "https://www.automax.tn/voitures-occasion/?prix-from=3000&page=1&trier-par=recent"
         self.nativeUrl = "https://www.automax.tn"
 
@@ -67,12 +76,10 @@ class ScrappOccasionAutoMaxTn:
         for i in range(2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:62] + str(i) + self.baseUrl[63:]))
         try:
-            
             for index, voiture in enumerate(listeDesVoitures, start = 1):
                 soup = self.parsing_page_source(voiture)
                 data = self.extract_data(soup)
                 all_Data[f'dict{index}']=data
-                
         finally: 
             self.driver.quit()
         return all_Data
@@ -114,9 +121,11 @@ class ScrappOccasionAutoMaxTn:
     
     def run_whole_process(self):
         self.auto_max_scrapper_runner("FileAutoMaxPostScrapTest")
+        os.makedirs(os.path.join(path_to_DataPostScraping, "AutoMax"), exist_ok=True)
         data_directory = os.path.join(path_to_DataPostScraping, "AutoMax", "FileAutoMaxPostScrapTest.csv")
         AutoMaxFile = pd.read_csv(data_directory)
         AutoMaxData = self.auto_max_columns_standardise(AutoMaxFile)
+        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "FileAutoMaxPostColumnStandardised.xlsx")
         AutoMaxData.to_excel(data_directory)
 

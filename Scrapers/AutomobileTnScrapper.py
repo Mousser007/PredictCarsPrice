@@ -110,9 +110,11 @@ class ScrapperAutomobileTnOcc:
         self.pageInitiale = 1
         self.pageFinale = 2
         # self.automobile_tn_scrapper_runner("FileAutomobileTnPostScrapTest")
+        os.makedirs(os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion'), exist_ok=True)
         file_path = os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion', 'FileAutomobileTnPostScrapTest.csv')
         AutomobileTnFile = pd.read_csv(file_path)
         AutomobileTnData = self.automobile_tn_columns_standardise(AutomobileTnFile)
+        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
         data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutomobileTnFilePostColumnStandardised.xlsx")
         AutomobileTnData.to_excel(data_directory)
 
