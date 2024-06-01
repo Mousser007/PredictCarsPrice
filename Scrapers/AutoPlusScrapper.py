@@ -28,7 +28,7 @@ class ScrappAutoPlusTnOccasion:
     def parsing_page_source(self, url: str):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(25)
         except WebDriverException:
             self.driver.refresh()
             time.sleep(20)
