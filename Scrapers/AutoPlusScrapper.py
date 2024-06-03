@@ -84,7 +84,7 @@ class ScrappAutoPlusTnOccasion:
 
     def auto_plus_scrapper_runner(self, OutputFileName):
         standardize = ColumnsStandardiser()
-        data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus")
+        data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus","Occasion")
         file_path = os.path.join(data_directory, OutputFileName + '.csv')
         data = self.scrape()
         dataStandardized = standardize.column_standardize(data)
