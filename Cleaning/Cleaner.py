@@ -141,7 +141,7 @@ class cleaner:
         dataframe = self.eliminer_pointvirgtiret_kilometrage(dataframe)
         dataframe["Kilometrage"] = dataframe["Kilometrage"].apply(lambda x : self.is_all_carac_are_same(x))
         dataframe["Kilometrage"] = dataframe["Kilometrage"].apply(lambda x : self.ajout_des_zero(x))
-        dataframe["Kilometrage"]=dataframe.Kilometrage.astype(int)
+        dataframe["Kilometrage"] = dataframe.Kilometrage.astype(int)
         return dataframe
     
     def nettoyer_marque(self, dataframe):

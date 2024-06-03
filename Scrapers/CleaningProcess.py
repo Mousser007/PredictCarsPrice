@@ -17,46 +17,6 @@ class CleaningUseCars:
         self.importer = fileImporter.Importer()
         self.cln = cleaner()
 
-    # def testPipeline(self):
-    #     # Nettoyage des données phase 1
-    #     imp = Importer()
-    #     ParentPath = os.path.dirname(os.getcwd())
-    #     destination = os.path.join(ParentPath, 'Data', 'DataPostCleaning')
-        # Affare
-        # testAffare = ScrappOccasionAffareTn()
-        # affarePostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AffareTn\\AffareTnOcc.csv")
-        # affarePostCleaning = testAffare.affare_columns_standardise(affarePostScrapping)
-        # affarePostCleaning.to_excel(destination + '\\' + "affarePostCleaning.xlsx")
-    #     # # AutoMax
-    #     # testAutomax = ScrappOccasionAutoMaxTn()
-    #     # automaxPostScrapping = pd.read_excel("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutoMaxTn\\AutoMaxTnOcc.xlsx")
-    #     # automaxPostCleaning = testAutomax.auto_max_columns_standardise(automaxPostScrapping)
-    #     # automaxPostCleaning.to_excel(destination +'\\' + "automaxPostCleaning.xlsx")
-    #     # # AutomobileTn
-    #     # testAutomobileTn = ScrapperAutomobileTnOcc()
-    #     # automobileTnPostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutomobileTn\\"
-    #     #                                         +"AutomobileTnOccasion\\FinalResult.csv")
-    #     # automobileTnPostCleaning = testAutomobileTn.automobile_tn_columns_standardise(automobileTnPostScrapping)
-    #     # automobileTnPostCleaning.to_excel(destination + '\\' + "automobileTnPostCleaning.xlsx")
-    #     # # AutoPlusScrapper
-    #     # testAutoPlus = ScrappAutoPlusTnOccasion()
-    #     # autoPlusPostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutoPlusTn"+
-    #     #                                         "\\AutoPlusOccasion\\ScrappingDataVoitOccasionAutoPlus.csv")
-    #     # autoPlusPostCleaning = testAutoPlus.auto_plus_columns_standardise(autoPlusPostScrapping)
-    #     # autoPlusPostCleaning.to_excel(destination + '\\' + "autoPlusPostCleaning.xlsx")
-    #     # # AutoPrix
-    #     # testAutoPrix = ScrappAutoPrixOccasion()
-    #     # autoPrixPostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutoPrixTn"+
-    #     #                                         "\\AutoPirxOccasion\\AutoPrixOccFinal.csv")
-    #     # autoPrixPostCleaning = testAutoPrix.auto_prix_columns_standardise(autoPrixPostScrapping)
-    #     # autoPrixPostCleaning.to_excel(destination + '\\' + "autoPrixPostCleaning.xlsx")
-    #     # #Tayara
-    #     # testTayaraTn = ScrappOccasionTayaraTn()
-    #     # TayaraTnPostScrapping = imp.merge_csv_files("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\TayaraTn2\\")
-    #     # TayaraTnPostCleaning = testTayaraTn.tayara_columns_standardise(TayaraTnPostScrapping)
-    #     # TayaraTnPostCleaning.to_excel(destination + '\\' + "TayaraTnPostCleaning.xlsx")
-    #
-        # Nettoyage des données phase 2
     def cleaning(self):
         dataframe = self.importer.merge_excel_files(os.path.join(path_to_DataPostColumnsStandardisedOccasion, ""))
         dataframe = self.cln.eliminate_unnamed_columns(dataframe)
@@ -106,3 +66,42 @@ if __name__ == "__main__":
     # cleaningNewCars = CleaningNewCars()
     # cleaningNewCars.cleaning()
     pass
+    # def testPipeline(self):
+    #     # Nettoyage des données phase 1
+    #     imp = Importer()
+    #     ParentPath = os.path.dirname(os.getcwd())
+    #     destination = os.path.join(ParentPath, 'Data', 'DataPostCleaning')
+        # Affare
+        # testAffare = ScrappOccasionAffareTn()
+        # affarePostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AffareTn\\AffareTnOcc.csv")
+        # affarePostCleaning = testAffare.affare_columns_standardise(affarePostScrapping)
+        # affarePostCleaning.to_excel(destination + '\\' + "affarePostCleaning.xlsx")
+    #     # # AutoMax
+    #     # testAutomax = ScrappOccasionAutoMaxTn()
+    #     # automaxPostScrapping = pd.read_excel("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutoMaxTn\\AutoMaxTnOcc.xlsx")
+    #     # automaxPostCleaning = testAutomax.auto_max_columns_standardise(automaxPostScrapping)
+    #     # automaxPostCleaning.to_excel(destination +'\\' + "automaxPostCleaning.xlsx")
+    #     # # AutomobileTn
+    #     # testAutomobileTn = ScrapperAutomobileTnOcc()
+    #     # automobileTnPostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutomobileTn\\"
+    #     #                                         +"AutomobileTnOccasion\\FinalResult.csv")
+    #     # automobileTnPostCleaning = testAutomobileTn.automobile_tn_columns_standardise(automobileTnPostScrapping)
+    #     # automobileTnPostCleaning.to_excel(destination + '\\' + "automobileTnPostCleaning.xlsx")
+    #     # # AutoPlusScrapper
+    #     # testAutoPlus = ScrappAutoPlusTnOccasion()
+    #     # autoPlusPostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutoPlusTn"+
+    #     #                                         "\\AutoPlusOccasion\\ScrappingDataVoitOccasionAutoPlus.csv")
+    #     # autoPlusPostCleaning = testAutoPlus.auto_plus_columns_standardise(autoPlusPostScrapping)
+    #     # autoPlusPostCleaning.to_excel(destination + '\\' + "autoPlusPostCleaning.xlsx")
+    #     # # AutoPrix
+    #     # testAutoPrix = ScrappAutoPrixOccasion()
+    #     # autoPrixPostScrapping = pd.read_csv("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\AutoPrixTn"+
+    #     #                                         "\\AutoPirxOccasion\\AutoPrixOccFinal.csv")
+    #     # autoPrixPostCleaning = testAutoPrix.auto_prix_columns_standardise(autoPrixPostScrapping)
+    #     # autoPrixPostCleaning.to_excel(destination + '\\' + "autoPrixPostCleaning.xlsx")
+    #     # #Tayara
+    #     # testTayaraTn = ScrappOccasionTayaraTn()
+    #     # TayaraTnPostScrapping = imp.merge_csv_files("C:\\Users\\Mousser\\Desktop\\PfeStarAssurance\\TayaraTn2\\")
+    #     # TayaraTnPostCleaning = testTayaraTn.tayara_columns_standardise(TayaraTnPostScrapping)
+    #     # TayaraTnPostCleaning.to_excel(destination + '\\' + "TayaraTnPostCleaning.xlsx")
+    #

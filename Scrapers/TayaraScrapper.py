@@ -32,10 +32,10 @@ class ScrappOccasionTayaraTn:
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(4)
+            time.sleep(25)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(4)
+            time.sleep(25)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def nbre_de_page(self, soup):
@@ -135,7 +135,7 @@ class ScrappOccasionTayaraTn:
         return dataframe
     
     def run_whole_process(self):
-        # self.tayara_scrapper_runner('TayaraFilePostScrapTest')
+        self.tayara_scrapper_runner('TayaraFilePostScrapTest')
         os.makedirs(os.path.join(path_to_DataPostScraping, "Tayara"), exist_ok=True)
         ## S'il y a plusieurs files csv qui viennent du scrapping du site tayara il faut utiliser la methode merge_csv_files du module fileImporter
         data_directory = os.path.join(path_to_DataPostScraping, "Tayara", "TayaraFilePostScrapTest.csv")
