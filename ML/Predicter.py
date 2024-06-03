@@ -107,24 +107,26 @@ class Prediction:
         data = self.eliminer_les_marque_luxe(data)
         data = data.drop(columns={"Couleur", "Carrosserie"})
         data = data.loc[(data.Modele != "GOLF") & (data.Modele != "POLO") & (data.Modele != "CLIO")]
+        data['Kilometrage_par_Annee'] = (data['Kilometrage'] / (2024 - data['Annee'])).astype(int)
         regressor = XGBRegressor(max_depth=5, n_estimators=700, eta=0.09999)
         prepare = datapreparation()
-        data = prepare.extraire_top_car_per_column_name(data, "Marque", 16)
-        data = prepare.extraire_top_car_per_column_name(data, "Modele", 5)
+        data = prepare.extraire_top_car_per_column_name(data, "Marque", 15)
+        data = prepare.extraire_top_car_per_column_name(data, "Modele", 6)
         data = data.groupby('Marque').apply(prepare.remove_outliers, min_value=0.01, max_value=0.98).reset_index(drop= True)
         scaler = MinMaxScaler()
         data['Prix_normalisé'] = scaler.fit_transform(data[['Prix']])
-        joblib.dump(scaler, path_to_RequirementsFiles + "scaler.joblib")
+        # joblib.dump(scaler, path_to_RequirementsFiles + "scaler.joblib")
         listOfColumnToDrop = ["Prix", "Prix_normalisé"]
         targetColumnName = "Prix_normalisé"
         inputValue, outputValue, dict = self.label_encoder_columns(data, listOfColumnToDrop, targetColumnName)
-        for key, value in dict.items():
-            joblib.dump(value, path_to_RequirementsFiles + '\\label_encoder' + key + '.pkl')
+        # for key, value in dict.items():
+        #     joblib.dump(value, path_to_RequirementsFiles + '\\label_encoder' + key + '.pkl')
         X_train, X_test, y_train, y_test = self.train_test_split(inputValue, outputValue)
         predictedDf, mse, mae, trainedRegressor = self.predict_algo(X_train, y_train, X_test, y_test, regressor)
-        joblib.dump(trainedRegressor, path_to_RequirementsFiles + "modele_xgboost.pkl")
-        return "les RequirementsFiles sont mis à jours"
-    
+        # joblib.dump(trainedRegressor, path_to_RequirementsFiles + "modele_xgboost.pkl")
+        return "Mise à jours du modéle avec succées"
+
+
     def preprocess_input(self, input_values):
         df = pd.DataFrame([input_values])
         filePath = os.path.join(path_to_RequirementsFiles, "label_encoder")

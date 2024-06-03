@@ -66,6 +66,17 @@ if __name__ == "__main__":
     # cleaningNewCars = CleaningNewCars()
     # cleaningNewCars.cleaning()
     pass
+
+
+
+
+
+
+
+
+
+
+
     # def testPipeline(self):
     #     # Nettoyage des données phase 1
     #     imp = Importer()
