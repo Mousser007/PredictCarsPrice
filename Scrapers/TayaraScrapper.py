@@ -135,7 +135,7 @@ class ScrappOccasionTayaraTn:
         return dataframe
     
     def run_whole_process(self):
-        # self.tayara_scrapper_runner('TayaraFilePostScrapTest')
+        self.tayara_scrapper_runner('TayaraFilePostScrapTest')
         os.makedirs(os.path.join(path_to_DataPostScraping, "Tayara"), exist_ok=True)
         ## S'il y a plusieurs files csv qui viennent du scrapping du site tayara il faut utiliser la methode merge_csv_files du module fileImporter
         data_directory = os.path.join(path_to_DataPostScraping, "Tayara", "TayaraFilePostScrapTest.csv")
