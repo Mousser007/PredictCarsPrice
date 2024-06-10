@@ -8,8 +8,8 @@ from TayaraScrapper import *
 
 
 if __name__ == "__main__":
-    # test = ScrappOccasionAffareTn()
-    # test.run_whole_process()
+    test = ScrappOccasionAffareTn()
+    test.run_whole_process()
     # test = ScrappOccasionAutoMaxTn()
     # test.run_whole_process()
     # test = ScrapperAutomobileTnOcc()
