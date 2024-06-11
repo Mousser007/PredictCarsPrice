@@ -3,7 +3,9 @@ from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
 import time
 from math import ceil 
-import pandas as pd 
+import pandas as pd
+
+import Config
 from Cleaning.ColumnStandardiser import ColumnsStandardiser
 from Cleaning.BrandModelExtraction import ExtractionMarqueModele
 import os
@@ -24,8 +26,8 @@ class ScrappOccasionAutoMaxTn:
         options.add_argument(
             "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
         self.driver = webdriver.Chrome(options=options)
-        self.baseUrl = "https://www.automax.tn/voitures-occasion/?prix-from=3000&page=1&trier-par=recent"
-        self.nativeUrl = "https://www.automax.tn"
+        self.baseUrl = Config.baseUrlAutomax
+        self.nativeUrl = Config.nativeUrlAutomax
 
     def parsing_page_source(self, url):
         try:
@@ -48,7 +50,7 @@ class ScrappOccasionAutoMaxTn:
         return list(set([a.get('href') for a in links ]))
     
     def extract_data(self, soup):
-        data={}
+        data = {}
         try: 
             dateDeLannonce = soup.find('div', {'class':'vehica-car-date'}).text.strip() if soup.find('div', {'class':'vehica-car-date'}) else None 
             prix = soup.find('div', {'class':'vehica-car-price'}).text.strip() if soup.find('div', {'class':'vehica-car-price'}) else None 

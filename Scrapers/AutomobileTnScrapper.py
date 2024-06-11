@@ -1,6 +1,8 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
+
+import Config
 from Cleaning.ColumnStandardiser import ColumnsStandardiser
 from selenium.common.exceptions import WebDriverException
 from Cleaning.BrandModelExtraction import ExtractionMarqueModele
@@ -8,7 +10,6 @@ import pandas as pd
 from Cleaning.Cleaner import *
 from Config import *
 # import logging
-#
 # logging.basicConfig(level=logging.INFO)
 # logger = logging.getLogger()
 
@@ -25,7 +26,7 @@ class ScrapperAutomobileTnOcc:
         options.add_argument('--window-size=1920x1080')
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
         self.driver = webdriver.Chrome(options=options)
-        self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
+        self.baseUrl = Config.baseUrlAutomobileTn
         # self.driver = webdriver.Chrome()
         # self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
         self.pageInitiale = 1
@@ -100,8 +101,9 @@ class ScrapperAutomobileTnOcc:
                                              "Couleur extérieure": "Couleur"})
         # dataframe = dataframe.drop(columns={"Couleur intérieure", "Date de l'annonce",
         #                                     "Nombre de places", "Nombre de portes", "Transmission", "Sellerie","Modele"})
-        dataframe = dataframe[['Kilometrage','Annee','Energie','BoiteVitesse','PuissanceFiscale','Couleur','Marque','Modèle','Prix']]
-        dataframe = dataframe.rename(columns={"Modèle":"Modele"})
+        dataframe = dataframe[['Kilometrage', 'Annee', 'Energie', 'BoiteVitesse',
+                               'PuissanceFiscale', 'Couleur', 'Marque', 'Modèle', 'Prix']]
+        dataframe = dataframe.rename(columns={"Modèle": "Modele"})
         cln = cleaner()
         dataframe = cln.eliminate_unnamed_columns(dataframe)
         return dataframe
@@ -241,10 +243,17 @@ class ScrapperAutomobileTnNeuf:
 
 ## MAIN ##
 if __name__ == "__main__":
+
+    pass
+
+
+
+
+
+
     # dataframe = pd.read_excel("D:\\PredictCarsPrice\\Data\\DataPostScraping\\AutomobileTnNeuf.xlsx")
     # test = ScrapperAutomobileTnNeuf()
     # dataframe = test.automobile_tn_columns_standardise(dataframe)
     # dataframe.to_excel("D:\\PredictCarsPrice\\Data\\DataPostScraping\\testautomobiletn.xlsx")
     # test = ScrapperAutomobileTnNeuf()
     # test.run_whole_process()
-    pass

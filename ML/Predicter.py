@@ -56,7 +56,7 @@ class Prediction:
                 label_encoder = joblib.load(filePath + col + '.pkl')
                 input_values[col] = label_encoder.fit_transform(input_values[col])
                 dict[col] = label_encoder
-        return input_values, output_values,dict
+        return input_values, output_values, dict
     
     def label_encoder_columns(self,dataframe, ListOfcolumnsToDrop, targetColumnName):
         # Initialize LabelEncoder 
@@ -75,7 +75,7 @@ class Prediction:
         X_train, X_test, y_train, y_test = train_test_split(input_values, output_values, test_size=0.2, random_state=42)
         return X_train, X_test, y_train, y_test
     
-    def predict_algo(self,X_train,y_train,X_test,y_test,regressor):
+    def predict_algo(self, X_train, y_train, X_test, y_test, regressor):
         regressor.fit(X_train, y_train)
         # Make predictions on the testing data
         y_pred = regressor.predict(X_test)
@@ -84,7 +84,7 @@ class Prediction:
         # print("Mean Squared Error:", mse)
         X_test["Target"] = y_test
         X_test["Prediction"] = y_pred
-        X_test["AbsError"]=np.abs(y_test-y_pred)
+        X_test["AbsError"] = np.abs(y_test-y_pred)
         mae = np.mean(X_test["AbsError"])
         # print("Mean Absolute Error:", mae)
         return X_test,mse,mae, regressor

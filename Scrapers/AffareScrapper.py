@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import time
 from math import ceil 
 import re
+
+import Config
 from Cleaning.ColumnStandardiser import ColumnsStandardiser
 from Cleaning.BrandModelExtraction import ExtractionMarqueModele
 import pandas as pd 
@@ -26,8 +28,8 @@ class ScrappOccasionAffareTn:
         options.add_argument(
             "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
         self.driver = webdriver.Chrome(options=options)
-        self.baseUrl = "https://www.affare.tn/petites-annonces/tunisie/voiture-neuve-occassion-prix-tayara-a-vendre?o=1&t=prix-moins-cher&prix=3000-max"
-        self.nativeUrl = "https://www.affare.tn"
+        self.baseUrl = Config.baseUrlAffare
+        self.nativeUrl = Config.nativeUrlAffare
         
     def parsing_page_source(self, url):
         try:
@@ -42,7 +44,7 @@ class ScrappOccasionAffareTn:
         h2 = soup.find('h2',{'class':'one-line'}).text.strip()
         nbreDAnnonce = int(re.search(r'\((.*?)\)',h2).group(1))
         nbreDePage = ceil(nbreDAnnonce/30)
-        return nbreDePage
+        return nbreDePage, nbreDAnnonce
     
     def extract_cars_urls(self, pageUrl):
         soup = self.parsing_page_source(pageUrl)
@@ -72,16 +74,19 @@ class ScrappOccasionAffareTn:
     def scrape(self):
         all_Data= {}
         soup = self.parsing_page_source(self.baseUrl)
-        nbreDePage= self.nbre_de_page(soup)
-        listeDesVoitures=[]
-        # for i in range(nbreDePage+1):
+        nbreDePageTotale, nbreDAnnonceTotale = self.nbre_de_page(soup)
+        # nbre_de_page_a_scrapper = ceil((nbreDAnnonceTotale - Config.nbre_annonce_site_affare)/30)
+        # Config.nbre_annonce_site_affare = nbreDAnnonceTotale
+        listeDesVoitures = []
+        # for i in range(nbreDePageTotale+1):
         for i in range(2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:94]+str(i)+self.baseUrl[95:]))
+        #l3 = [element for element in listeDesVoitures if element not in Config.liste_de_voiture_affare]
         try:
             for index, voiture in enumerate(listeDesVoitures, start=1):
                 soup = self.parsing_page_source(self.nativeUrl+voiture)
                 data = self.extract_data(soup)
-                all_Data[f'dict{index}']=data 
+                all_Data[f'dict{index}'] = data
         finally: 
             self.driver.quit()
         return all_Data

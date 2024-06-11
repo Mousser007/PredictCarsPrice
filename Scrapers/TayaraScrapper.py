@@ -2,7 +2,9 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
 import time
-from math import ceil 
+from math import ceil
+
+import Config
 from Cleaning.ColumnStandardiser import ColumnsStandardiser
 from Cleaning.BrandModelExtraction import ExtractionMarqueModele
 import pandas as pd 
@@ -14,25 +16,16 @@ from Config import *
 class ScrappOccasionTayaraTn:
 
     def __init__(self):
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')  # Run in headless mode
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-gpu')
-        options.add_argument("--disable-javascript")
-        options.add_argument('--window-size=1920x1080')
-        options.add_argument(
-            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-        self.driver = webdriver.Chrome(options=options)
-        self.baseUrl = "https://www.tayara.tn/ads/c/V%C3%A9hicules/Voitures/t/Occasion/?minPrice=10000&maxPrice=1000000000&page=1"
-        self.nativeUrl = "https://www.tayara.tn"
+        self.driver = Config.driverConfig
+        self.baseUrl = Config.baseUrlTayara
+        self.nativeUrl = Config.nativeUrlTayara
         self.pageInitiale = 1
         self.pageFinale = 2
         
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(25)
+            time.sleep(20)
         except WebDriverException:
             self.driver.refresh()
             time.sleep(25)
