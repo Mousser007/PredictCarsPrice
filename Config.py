@@ -1,9 +1,8 @@
 import os
 from selenium import webdriver
 
+
 ##Affare Config
-liste_de_voiture_affare=[]
-nbre_annonce_site_affare = 0
 baseUrlAffare = "https://www.affare.tn/petites-annonces/tunisie/voiture-neuve-occassion-prix-tayara-a-vendre?o=1&t=prix-moins-cher&prix=3000-max"
 nativeUrlAffare = "https://www.affare.tn"
 ##AutoMax Config
