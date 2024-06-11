@@ -142,8 +142,9 @@ class ScrappOccasionTayaraTn:
 ##MAIN##
 if __name__ == "__main__":
 
+    pass
+
     # tayara = ScrappOccasionTayaraTn()
     # tayara.pageInitiale = 1
     # tayara.pageFinale = 1
     # tayara.run_whole_process()
-    pass

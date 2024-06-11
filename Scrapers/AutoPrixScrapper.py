@@ -112,8 +112,11 @@ class ScrappAutoPrixOccasion:
 
 ## MAIN ##
 if __name__ == "__main__":
+
+    pass
+
+
     # autoPrixScrapper = ScrappAutoPrixOccasion()
     # autoPrixScrapper.PageInitiale = 1
     # autoPrixScrapper.PageFinale = 2
     # autoPrixScrapper.run_whole_process()
-    pass

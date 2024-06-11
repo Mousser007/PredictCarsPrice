@@ -113,17 +113,8 @@ class ScrappAutoPlusTnNeuf:
 
     def __init__(self):
         self.scrapOcc = ScrappAutoPlusTnOccasion()
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')  # Run in headless mode
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-gpu')
-        options.add_argument("--disable-javascript")
-        options.add_argument('--window-size=1920x1080')
-        options.add_argument(
-            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-        self.driver = webdriver.Chrome(options=options)
-        self.baseUrl = 'https://www.auto-plus.tn/les-voitures-neuves'
+        self.driver = Config.driverConfig
+        self.baseUrl = Config.baseUrlAutoplusNeuf
 
     def extract_brands_url(self, soup):
         brandsListDiv = soup.find('div', {'class': 'marq_listbox_wrapper'})
@@ -221,6 +212,10 @@ class ScrappAutoPlusTnNeuf:
 
 ## MAIN ##
 if __name__ == "__main__":
+
+    pass
+
+
     # parent_directory = os.path.dirname(os.getcwd())
     # path_to_AutoPlus_Neuf = os.path.join(parent_directory, 'Data', 'DataPostScraping', 'AutoPlus', 'Neuf')
     # dataframe = pd.read_excel("D:\\PredictCarsPrice\\Data\\DataPostScraping\\AutoPlusNeuf.xlsx")
@@ -229,4 +224,3 @@ if __name__ == "__main__":
     # dataframe.to_excel(path_to_AutoPlus_Neuf + "\\test.xlsx")
     # test = ScrappAutoPlusTnNeuf()
     # test.run_whole_process()
-    pass

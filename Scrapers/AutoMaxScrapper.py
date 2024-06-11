@@ -126,8 +126,9 @@ class ScrappOccasionAutoMaxTn:
 
 ## MAIN ##
 if __name__ == "__main__":
-    # AutoMax = ScrappOccasionAutoMaxTn()
-    # AutoMax.run_whole_process()
+
     pass
 
 
+    # AutoMax = ScrappOccasionAutoMaxTn()
+    # AutoMax.run_whole_process()

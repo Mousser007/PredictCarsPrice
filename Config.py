@@ -10,8 +10,10 @@ baseUrlAutomax = "https://www.automax.tn/voitures-occasion/?prix-from=3000&page=
 nativeUrlAutomax = "https://www.automax.tn"
 ##Automobile.tn Config
 baseUrlAutomobileTn = 'https://www.automobile.tn/fr/occasion/s=sort!date'
+baseUrlAutomobileTnNeuf = 'https://www.automobile.tn/fr/neuf'
 ##AutoPlus Config
 baseUrlAutoplus = "https://www.auto-plus.tn/voitures-d-occasion/1/p/1"
+baseUrlAutoplusNeuf = 'https://www.auto-plus.tn/les-voitures-neuves'
 nativeUrlAutoplus = "https://www.auto-plus.tn/voitures-d-occasion"
 ##AutoPrix Config
 baseUrlAutoprix = "https://www.autoprix.tn/recherche?min_price=4000&max_price=200000&cp=1&sortby=date&is_sold=true&is_price=true&nb=1"
