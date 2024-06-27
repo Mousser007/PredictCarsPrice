@@ -136,7 +136,7 @@ class ScrappOccasionAffareTn:
         return dataframe
 
     def run_whole_process(self):
-        # self.affare_scrapper_runner()
+        self.affare_scrapper_runner()
         AffareFile =pd.read_sql('AffarePostScrapping', con=engine)
         AffareData = self.affare_columns_standardise(AffareFile)
         AffareData.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
