@@ -1,5 +1,5 @@
+import datetime
 import os.path
-
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -88,6 +88,7 @@ class Prediction:
         mae = np.mean(X_test["AbsError"])
         # print("Mean Absolute Error:", mae)
         return X_test,mse,mae, regressor
+
     def eliminer_les_valeur_null(self, dataframe):
         dataframe = dataframe.loc[dataframe.Kilometrage != 0]
         dataframe = dataframe.loc[dataframe.Annee != 0]
@@ -126,8 +127,11 @@ class Prediction:
         X_train, X_test, y_train, y_test = self.train_test_split(inputValue, outputValue)
         predictedDf, mse, mae, trainedRegressor = self.predict_algo(X_train, y_train, X_test, y_test, regressor)
         joblib.dump(trainedRegressor, os.path.join(path_to_RequirementsFiles, "modele_xgboost.pkl"))
-        return "Mise à jours du modéle avec succées"
+        return ("Mise à jours du modéle avec succées")
 
+    # "Date du mise à jour du modele: ", datetime.datetime.now() + "/n" +
+    # "Mean squarred error:",mse
+    # "Mean absolute error:",mae
 
     def preprocess_input(self, input_values):
         df = pd.DataFrame([input_values])
@@ -146,35 +150,3 @@ class Prediction:
 
 if __name__ == "__main__":
     pass
-    # filename = "data2.xlsx"
-    # parentPath = os.path.dirname(os.getcwd())
-    # filePath = os.path.join(parentPath, "Data", "DataPostCleaning", filename)
-    # data = pd.read_excel(filePath)
-    #
-    # predictedDf, mse, mae = test.prediction_runner(data)
-    # print(predictedDf)
-    # print(mse)
-    # print(mae)
-    # # print(mse)
-    # # print(mae)
-    # test = Prediction()
-    # input_values = {'Energie': 'DIESEL',
-    #                 'BoiteVitesse': 'AUTOMATIQUE',
-    #                 'Modele': 'SERIE5',
-    #                 'Marque': 'BMW'
-    #                 }
-    # dataframe = test.preprocess_input(input_values)
-    # dataframe['PuissanceFiscale'] = 12
-    # dataframe['Annee'] = 2016
-    # dataframe['Kilometrage'] = 200000
-    # dataframe['Kilometrage_par_Annee'] = (dataframe['Kilometrage'] / (2024 - dataframe['Annee'])).astype(int)
-    # dataframe = dataframe[['Energie', 'Annee', 'Kilometrage', 'PuissanceFiscale', 'BoiteVitesse', 'Marque', 'Modele','Kilometrage_par_Annee']]
-    # prediction = test.make_prediction(dataframe)
-    # predDataframe = pd.DataFrame({"PrixNormalisé": prediction})
-    # scaler = joblib.load('D:\\PredictCarsPrice\\ML\\RequirementsFiles\\scaler.joblib')
-    # prix = scaler.inverse_transform(predDataframe.PrixNormalisé.to_numpy().reshape(-1, 1))
-    # print(prix)
-
-    # df= pd.DataFrame([{"Energie" : "ESSENCE"}])
-    # label_encoder = joblib.load('D:\\PredictCarsPrice\\ML\\RequirementsFiles\\label_encoderEnergie.pkl')
-    # print(label_encoder.transform(df["Energie"]))

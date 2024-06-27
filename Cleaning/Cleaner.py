@@ -145,8 +145,9 @@ class cleaner:
         return dataframe
     
     def nettoyer_marque(self, dataframe):
-        dataframe["Marque"]=dataframe["Marque"].str.upper()
-        dataframe= dataframe.dropna(subset="Marque")
+        dataframe["Marque"] = dataframe["Marque"].str.upper()
+        dataframe = dataframe.dropna(subset="Marque")
+        dataframe = dataframe.loc[dataframe.Marque!=""]
         dataframe['Marque'] = dataframe['Marque'].apply(lambda x: 'MERCEDES-BENZ' if x.strip() == 'MERCEDES' else x)
         return dataframe
 
@@ -156,9 +157,10 @@ class cleaner:
         dataframe["Modele"]=dataframe["Modele"].str.replace(" ", "")
         dataframe["Modele"] = dataframe["Modele"].str.replace("É", "E")
         dataframe["Modele"] = dataframe["Modele"].str.replace("-", "")
-        dataframe=self.corriger_marque_modele(dataframe)
+        dataframe = self.corriger_marque_modele(dataframe)
         dataframe["Modele"] = dataframe["Modele"].replace("nan", np.nan)
-        dataframe.dropna(subset=["Modele"],inplace=True)
+        dataframe.dropna(subset=["Modele"], inplace=True)
+        dataframe = dataframe.loc[dataframe.Modele!=""]
         return dataframe
 
     def nettoyer_modele_voiture_neuf(selfself,dataframe):

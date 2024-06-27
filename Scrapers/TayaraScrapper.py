@@ -3,7 +3,6 @@ from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
 import time
 from math import ceil
-
 import Config
 from Cleaning.ColumnStandardiser import ColumnsStandardiser
 from Cleaning.BrandModelExtraction import ExtractionMarqueModele
@@ -11,6 +10,29 @@ import pandas as pd
 import os
 from Cleaning.Cleaner import *
 from Config import *
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import sessionmaker
+
+
+
+class TayaraPostScrapping(Base):
+    __tablename__ = 'TayaraPostScrapping'
+    id = Column(Integer, primary_key=True)
+    Annee = Column(String)
+    BoiteVitesse = Column(String)
+    Kilometrage = Column(String)
+    Energie = Column(String)
+    PuissanceFiscale = Column(String)
+    datedelannonce = Column(String)
+    desc = Column(String)
+    Prix = Column(String)
+    description = Column(String)
+    Couleur = Column(String)
+    Carrosserie = Column(String)
+    etatdevehicule = Column(String)
+    Cylindree = Column(String)
+    Marque = Column(String)
+    Modele = Column(String)
 
 
 class ScrappOccasionTayaraTn:
@@ -25,10 +47,10 @@ class ScrappOccasionTayaraTn:
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(25)
+            time.sleep(8)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def nbre_de_page(self, soup):
@@ -72,7 +94,7 @@ class ScrappOccasionTayaraTn:
         all_Data = {}
         listeDesVoitures = []
         # for i in range(PageInitiale, PageFinale+1):
-        for i in range(2):
+        for i in range(1, 2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:104]+str(i)))
         try:
             for index, voiture in enumerate(listeDesVoitures, start=1):
@@ -83,18 +105,29 @@ class ScrappOccasionTayaraTn:
             self.driver.quit()
         return all_Data
     
-    def tayara_scrapper_runner(self,  OutputFileName):
-        os.makedirs(os.path.join(path_to_DataPostScraping, 'Tayara'), exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostScraping, "Tayara")
-        file_path = os.path.join(data_directory, OutputFileName + '.csv')
+    def tayara_scrapper_runner(self):
         data = self.scrape(self.pageInitiale, self.pageFinale)
         standardize = ColumnsStandardiser()
         dataStandardized = standardize.column_standardize(data)
-        standardize.load_data_in_csv_file(dataStandardized, file_path)
-    
+        Base.metadata.create_all(engine)
+        # Créer une session
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        for key, item in dataStandardized.items():
+            tayarapostscrapping = TayaraPostScrapping(
+                Energie=item['Carburant'], Annee=item['Année'], Kilometrage=item['Kilométrage'],
+                PuissanceFiscale=item['Puissance fiscale'], Carrosserie=item['Type de carrosserie'],
+                BoiteVitesse=item['Boite'], datedelannonce=item['date de l"annonce'],Cylindree=item['Cylindrée'],
+                desc=item['desc'], description=item['description'], Prix=item['prix'], Marque=item['Marque'],
+                Modele=item['Modèle'],Couleur=item['Couleur du véhicule'],etatdevehicule=item['Etat du véhicule'])
+            session.add(tayarapostscrapping)
+        # Commit les transactions
+        session.commit()
+        # Fermer la session
+        session.close()
+
     def tayara_columns_standardise(self, dataframe):    
-        dataframe = dataframe.rename(columns={"Kilométrage": "Kilometrage", "Année": "Annee", "Carburant": "Energie", "Boite": "BoiteVitesse", "Puissance fiscale": "PuissanceFiscale", "prix": "Prix", "Modèle": "Modele", "Couleur du véhicule": "Couleur", "Type de carrosserie": "Carrosserie"})
-        dataframe = dataframe.drop(columns={"Cylindrée", 'date de l"annonce', "description", "Etat du véhicule"})
+        dataframe = dataframe.drop(columns={"Cylindree", 'datedelannonce', "description", "etatdevehicule"})
         dataframe = dataframe.dropna(how='all')
         cln = cleaner()
         dataframe = cln.eliminate_unnamed_columns(dataframe)
@@ -128,21 +161,17 @@ class ScrappOccasionTayaraTn:
         return dataframe
     
     def run_whole_process(self):
-        self.tayara_scrapper_runner('TayaraFilePostScrapTest')
-        os.makedirs(os.path.join(path_to_DataPostScraping, "Tayara"), exist_ok=True)
-        ## S'il y a plusieurs files csv qui viennent du scrapping du site tayara il faut utiliser la methode merge_csv_files du module fileImporter
-        data_directory = os.path.join(path_to_DataPostScraping, "Tayara", "TayaraFilePostScrapTest.csv")
-        tayaraFile = pd.read_csv(data_directory)
-        tayaraData = self.tayara_columns_standardise(tayaraFile)
-        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "FileTayaraPostColumnStandardised.xlsx" )
-        tayaraData.to_excel(data_directory)
+        self.tayara_scrapper_runner()
+        tayaraDf = pd.read_sql('TayaraPostScrapping', con=engine)
+        tayaraDataStandardised = self.tayara_columns_standardise(tayaraDf)
+        tayaraDataStandardised.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
 
 
 ##MAIN##
 if __name__ == "__main__":
 
-    pass
+    test = ScrappOccasionTayaraTn()
+    test.run_whole_process()
 
     # tayara = ScrappOccasionTayaraTn()
     # tayara.pageInitiale = 1

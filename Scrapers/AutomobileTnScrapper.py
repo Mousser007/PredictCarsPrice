@@ -12,6 +12,31 @@ from Config import *
 # import logging
 # logging.basicConfig(level=logging.INFO)
 # logger = logging.getLogger()
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import sessionmaker
+
+
+class AutomobileTnPostScrapping(Base):
+    __tablename__ = 'AutomobileTnPostScrapping'
+    id = Column(Integer, primary_key=True)
+    Marque = Column(String)
+    Modele = Column(String)
+    Annee = Column(String)
+    BoiteVitesse = Column(String)
+    Kilometrage = Column(String)
+    Energie = Column(String)
+    PuissanceFiscale = Column(String)
+    datedelannonce = Column(String)
+    Prix = Column(String)
+    Transmission = Column(String)
+    Carrosserie = Column(String)
+    Gouvernorat = Column(String)
+    Couleur = Column(String)
+    Generation = Column(String)
+    Nombredeportes = Column(String)
+    Nombredeplaces = Column(String)
+    Couleurinterieure = Column(String)
+    Sellerie = Column(String)
 
 
 class ScrapperAutomobileTnOcc:
@@ -19,18 +44,16 @@ class ScrapperAutomobileTnOcc:
     def __init__(self):
         self.driver = Config.driverConfig
         self.baseUrl = Config.baseUrlAutomobileTn
-        # self.driver = webdriver.Chrome()
-        # self.baseUrl = 'https://www.automobile.tn/fr/occasion/s=sort!date'
         self.pageInitiale = 1
         self.pageFinale = 2
         
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(25)
+            time.sleep(8)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def extract_cars_urls(self, pageUrl):
@@ -47,9 +70,9 @@ class ScrapperAutomobileTnOcc:
             spec_value = li_tag.find('span', {'class': 'spec-value'}).text.strip()
             data[spec_name] = spec_value
         
-        Modele = soup.find('h1').text.strip()
+        # Modele = soup.find('h1').text.strip()
         Prix = soup.find('div', {'class': 'price'}).text.strip()
-        data['Modele'] = Modele
+        # data['Modele'] = Modele #Modele=Marque+Modele
         data['Prix'] = Prix
         
         atagsSpec = soup.find('div', {'class': 'col-md-6 mb-3 mb-md-0'})
@@ -62,10 +85,10 @@ class ScrapperAutomobileTnOcc:
         return data
     
     def scrape(self, pageInit, pageFinal):
-        urls=[]
+        urls = []
         try:
             # for i in range(pageInit,pageFinal+1):
-            for i in range(2):
+            for i in range(1, 2):
                 urls.extend(self.extract_cars_urls(self.baseUrl+'/'+str(i)+'?sort=date'))
             all_Data={}
             for index, url in enumerate(urls, start = 1):
@@ -76,26 +99,33 @@ class ScrapperAutomobileTnOcc:
             self.driver.quit()
         return all_Data
     
-    def automobile_tn_scrapper_runner(self, OutputFileName):
+    def automobile_tn_scrapper_runner(self):
         standardize = ColumnsStandardiser()
         data = self.scrape(self.pageInitiale, self.pageFinale)
         dataStandardized = standardize.column_standardize(data)
-        os.makedirs(os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion'), exist_ok=True)
-        file_path = os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion', OutputFileName + '.csv' )
-        standardize.load_data_in_csv_file(dataStandardized, file_path)
-    
+        Base.metadata.create_all(engine)
+        # Créer une session
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        for key, item in dataStandardized.items():
+            automobiletnpostscrapping = AutomobileTnPostScrapping(
+                Energie=item['Énergie'], Annee=item['Mise en circulation'], Kilometrage=item['Kilométrage'],
+                PuissanceFiscale=item['Puissance fiscale'], Marque=item['Marque'], Modele=item['Modèle'],
+                BoiteVitesse=item['Boite vitesse'], datedelannonce=item["Date de l'annonce"],
+                Sellerie=item['Sellerie'], Prix=item['Prix'],
+                Transmission=item['Transmission'], Carrosserie=item['Carrosserie'], Couleur=item['Couleur extérieure'],
+                Generation=item['Génération'], Nombredeportes=item['Nombre de portes'], Nombredeplaces=item['Nombre de places'],
+                Couleurinterieure=item['Couleur intérieure'], Gouvernorat=item['Gouvernorat'])
+            session.add(automobiletnpostscrapping)
+        # Commit les transactions
+        session.commit()
+        # Fermer la session
+        session.close()
+
     def automobile_tn_columns_standardise(self, dataframe):
-        dataframe= dataframe.rename(columns={"Kilométrage": "Kilometrage",
-                                             "Mise en circulation": "Annee",
-                                             "Énergie": "Energie",
-                                             "Boite vitesse": "BoiteVitesse",
-                                             "Puissance fiscale": "PuissanceFiscale",
-                                             "Couleur extérieure": "Couleur"})
-        # dataframe = dataframe.drop(columns={"Couleur intérieure", "Date de l'annonce",
-        #                                     "Nombre de places", "Nombre de portes", "Transmission", "Sellerie","Modele"})
-        dataframe = dataframe[['Kilometrage', 'Annee', 'Energie', 'BoiteVitesse',
-                               'PuissanceFiscale', 'Couleur', 'Marque', 'Modèle', 'Prix']]
-        dataframe = dataframe.rename(columns={"Modèle": "Modele"})
+        dataframe = dataframe[['id', 'Kilometrage', 'Annee', 'Energie', 'BoiteVitesse',
+                               'PuissanceFiscale', 'Marque', 'Modele', 'Prix', 'Couleur','Carrosserie']]
+        # dataframe = dataframe.rename(columns={"Modèle": "Modele"})
         cln = cleaner()
         dataframe = cln.eliminate_unnamed_columns(dataframe)
         return dataframe
@@ -103,14 +133,11 @@ class ScrapperAutomobileTnOcc:
     def run_whole_process(self):
         self.pageInitiale = 1
         self.pageFinale = 2
-        self.automobile_tn_scrapper_runner("FileAutomobileTnPostScrapTest")
-        os.makedirs(os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion'), exist_ok=True)
-        file_path = os.path.join(path_to_DataPostScraping, 'AutomobileTn', 'Occasion', 'FileAutomobileTnPostScrapTest.csv')
-        AutomobileTnFile = pd.read_csv(file_path)
-        AutomobileTnData = self.automobile_tn_columns_standardise(AutomobileTnFile)
-        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutomobileTnFilePostColumnStandardised.xlsx")
-        AutomobileTnData.to_excel(data_directory)
+        self.automobile_tn_scrapper_runner()
+        AutomobileTnDf = pd.read_sql('AutomobileTnPostScrapping', con=engine)
+        AutomobileTnDataStandardised = self.automobile_tn_columns_standardise(AutomobileTnDf)
+        AutomobileTnDataStandardised.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
+
 
 
 class ScrapperAutomobileTnNeuf:
@@ -226,11 +253,9 @@ class ScrapperAutomobileTnNeuf:
 
 ## MAIN ##
 if __name__ == "__main__":
-
     pass
-
-
-
+    # test = ScrapperAutomobileTnOcc()
+    # test.run_whole_process()
 
 
 

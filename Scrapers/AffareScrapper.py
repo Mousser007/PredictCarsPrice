@@ -4,15 +4,29 @@ from bs4 import BeautifulSoup
 import time
 from math import ceil 
 import re
-
 import Config
 from Cleaning.ColumnStandardiser import ColumnsStandardiser
 from Cleaning.BrandModelExtraction import ExtractionMarqueModele
 import pandas as pd 
-import os
 from Cleaning.Cleaner import *
 from Config import *
-import CleaningProcess
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import sessionmaker
+
+
+
+class AffarePostScrapping(Base):
+    __tablename__ = 'AffarePostScrapping'
+    id = Column(Integer, primary_key=True)
+    Energie = Column(String)
+    Année = Column(String)
+    Kilométrage = Column(String)
+    Puissance= Column(String)
+    Miseencirculation = Column(String)
+    Boite = Column(String)
+    datedelannonce = Column(String)
+    desc = Column(String)
+    prix = Column(String)
 
 
 class ScrappOccasionAffareTn:
@@ -25,10 +39,10 @@ class ScrappOccasionAffareTn:
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(25)
+            time.sleep(5)
         return BeautifulSoup(self.driver.page_source,'html.parser') if BeautifulSoup(self.driver.page_source,'html.parser') else None
     
     def nbre_de_page(self, soup):
@@ -70,7 +84,7 @@ class ScrappOccasionAffareTn:
         # Config.nbre_annonce_site_affare = nbreDAnnonceTotale
         listeDesVoitures = []
         # for i in range(nbreDePageTotale+1):
-        for i in range(2):
+        for i in range(1, 2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:94]+str(i)+self.baseUrl[95:]))
         #l3 = [element for element in listeDesVoitures if element not in Config.liste_de_voiture_affare]
         try:
@@ -82,23 +96,37 @@ class ScrappOccasionAffareTn:
             self.driver.quit()
         return all_Data
     
-    def affare_scrapper_runner(self, OutputFileName):
+    def affare_scrapper_runner(self):
         standardize = ColumnsStandardiser()
-        os.makedirs(os.path.join(path_to_DataPostScraping, 'Affare'), exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostScraping, "Affare")
-        file_path = os.path.join(data_directory, OutputFileName + '.csv')
+        # os.makedirs(os.path.join(path_to_DataPostScraping, 'Affare'), exist_ok=True)
+        # data_directory = os.path.join(path_to_DataPostScraping, "Affare")
+        # file_path = os.path.join(data_directory, OutputFileName + '.csv')
         data = self.scrape()
         dataStandardized = standardize.column_standardize(data)
-        standardize.load_data_in_csv_file(dataStandardized, file_path)
-    
+        Base.metadata.create_all(engine)
+        # Créer une session
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        for key, item in dataStandardized.items():
+            affarepostscrapping = AffarePostScrapping(
+                Energie=item['Energie'], Année=item['Année'], Kilométrage=item['Kilométrage'],
+                Puissance=item['Puissance'], Miseencirculation=item['Mise en circulation'],
+                Boite=item['Boîte'], datedelannonce=item["date de l'annonce"],
+                desc=item['desc'],prix=item['prix'])
+            session.add(affarepostscrapping)
+        # Commit les transactions
+        session.commit()
+        # Fermer la session
+        session.close()
+
     def affare_columns_standardise(self, dataframe):   
         extraction = ExtractionMarqueModele()
         dataframe = dataframe.rename(columns={"Kilométrage": "Kilometrage",
                                               "Année": "Annee",
-                                              "Boîte": "BoiteVitesse",
+                                              "Boite": "BoiteVitesse",
                                               "prix":"Prix",
                                               "Puissance":"PuissanceFiscale"})
-        dataframe = dataframe.drop(columns={"Mise en circulation", "date de l'annonce"})
+        dataframe = dataframe.drop(columns={"Miseencirculation", "datedelannonce"})
         dataframe['description'] = dataframe['desc']
         dataframe = dataframe.drop(columns={'desc'})
         dataframe = extraction.extraire_marque_modele(dataframe)
@@ -108,20 +136,15 @@ class ScrappOccasionAffareTn:
         return dataframe
 
     def run_whole_process(self):
-        self.affare_scrapper_runner("AffareFilePostScrapTest")
-        os.makedirs(os.path.join(path_to_DataPostScraping, "Affare"), exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostScraping, "Affare", "AffareFilePostScrapTest.csv")
-        AffareFile = pd.read_csv(data_directory)
+        # self.affare_scrapper_runner()
+        AffareFile =pd.read_sql('AffarePostScrapping', con=engine)
         AffareData = self.affare_columns_standardise(AffareFile)
-        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AffareFilePostColumnStandardised.xlsx")
-        AffareData.to_excel(data_directory)
+        AffareData.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
 
 
 if __name__ == "__main__":
-    # test = ScrappOccasionAffareTn()
-    # test.run_whole_process()
+    test = ScrappOccasionAffareTn()
+    test.run_whole_process()
     # # Phase cleaning
     # # test = CleaningProcess.CleaningUseCars()
     # # test.cleaning()
-    pass

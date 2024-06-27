@@ -11,6 +11,23 @@ from Cleaning.BrandModelExtraction import ExtractionMarqueModele
 import os
 from Cleaning.Cleaner import *
 from Config import *
+from sqlalchemy import  Column, Integer, String
+from sqlalchemy.orm import sessionmaker
+
+class AutoMaxPostScrapping(Base):
+    __tablename__ = 'AutoMaxPostScrapping'
+    id = Column(Integer, primary_key=True)
+    Marque = Column(String)
+    Modele = Column(String)
+    Annee = Column(String)
+    BoiteVitesse = Column(String)
+    Kilometrage = Column(String)
+    Energie = Column(String)
+    Gouvernorat = Column(String)
+    PuissanceFiscale = Column(String)
+    datedelannonce = Column(String)
+    desc = Column(String)
+    Prix = Column(String)
 
 
 class ScrappOccasionAutoMaxTn:
@@ -23,10 +40,10 @@ class ScrappOccasionAutoMaxTn:
     def parsing_page_source(self, url):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(25)
+            time.sleep(8)
         return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None
     
     def nbre_de_page(self, soup):
@@ -66,7 +83,7 @@ class ScrappOccasionAutoMaxTn:
         nbreDePage= self.nbre_de_page(soup)
         listeDesVoitures=[]
         # for i in range(nbreDePage+1):
-        for i in range(2):
+        for i in range(1, 2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:62] + str(i) + self.baseUrl[63:]))
         try:
             for index, voiture in enumerate(listeDesVoitures, start = 1):
@@ -77,14 +94,26 @@ class ScrappOccasionAutoMaxTn:
             self.driver.quit()
         return all_Data
     
-    def auto_max_scrapper_runner(self, OutputFileName):
+    def auto_max_scrapper_runner(self):
         standardize = ColumnsStandardiser()
-        os.makedirs(os.path.join(path_to_DataPostScraping, 'AutoMax'), exist_ok=True)
-        data_directory = os.path.abspath(os.path.join(path_to_DataPostScraping, "AutoMax"))
-        file_path = os.path.join(data_directory, OutputFileName + '.csv')
         data = self.scrape()
         dataStandardized = standardize.column_standardize(data)
-        standardize.load_data_in_csv_file(dataStandardized, file_path)
+        Base.metadata.create_all(engine)
+        # Créer une session
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        for key, item in dataStandardized.items():
+            automaxpostscrapping = AutoMaxPostScrapping(
+                Energie=item['Energie:'], Annee=item['Année:'], Kilometrage=item['Kilométrage:'],
+                PuissanceFiscale=item['Puissance fiscale:'], Marque=item['Marque:'], Modele=item['Modèle:'],
+                BoiteVitesse=item['Boite:'], datedelannonce=item["date de l'annonce"],
+                desc=item['desc'], Prix=item['prix'], Gouvernorat=item['Gouvernorat:'])
+            session.add(automaxpostscrapping)
+        # Commit les transactions
+        session.commit()
+        # Fermer la session
+        session.close()
+        # standardize.load_data_in_csv_file(dataStandardized, file_path)
 
     def automax_missing_marque_modele(self, dataframe):
         modelesList = ["CLIO", "GOLF", "POLO"]
@@ -94,16 +123,10 @@ class ScrappOccasionAutoMaxTn:
             dataframe.loc[maskModele, 'Modele'] = dataframe.loc[maskModele, ['desc', 'Marque']].apply(
                 lambda row: extraction.extraire_modele(row['desc'], row['Marque']), axis=1)
         return dataframe
+
     def auto_max_columns_standardise(self, dataframe):
-        dataframe = dataframe.rename(columns={"Kilométrage:": "Kilometrage",
-                                              "Année:": "Annee",
-                                              "Energie:": "Energie",
-                                              "Boite:":"BoiteVitesse",
-                                              "Puissance fiscale:": "PuissanceFiscale",
-                                              "prix":"Prix",
-                                              "Marque:":"Marque",
-                                              "Modèle:":"Modele"})
-        dataframe = dataframe.drop(columns={"Gouvernorat:", "date de l'annonce"})
+
+        dataframe = dataframe.drop(columns={"Gouvernorat", "datedelannonce"})
         dataframe = dataframe.dropna(how='all')
         dataframe['Marque'] = dataframe['Marque'].str.upper()
         dataframe['Modele'] = dataframe['Modele'].str.upper()
@@ -114,21 +137,26 @@ class ScrappOccasionAutoMaxTn:
         return dataframe
     
     def run_whole_process(self):
-        self.auto_max_scrapper_runner("FileAutoMaxPostScrapTest")
-        os.makedirs(os.path.join(path_to_DataPostScraping, "AutoMax"), exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostScraping, "AutoMax", "FileAutoMaxPostScrapTest.csv")
-        AutoMaxFile = pd.read_csv(data_directory)
-        AutoMaxData = self.auto_max_columns_standardise(AutoMaxFile)
-        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "FileAutoMaxPostColumnStandardised.xlsx")
-        AutoMaxData.to_excel(data_directory)
+        self.auto_max_scrapper_runner()
+        AutoMaxDf = pd.read_sql('AutoMaxPostScrapping', con=engine)
+        AutoMaxDataStandardised = self.auto_max_columns_standardise(AutoMaxDf)
+        AutoMaxDataStandardised.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
 
 
 ## MAIN ##
 if __name__ == "__main__":
-
     pass
 
 
-    # AutoMax = ScrappOccasionAutoMaxTn()
-    # AutoMax.run_whole_process()
+
+
+
+
+ # dataframe = dataframe.rename(columns={"Kilométrage:": "Kilometrage",
+        #                                       "Année:": "Annee",
+        #                                       "Energie:": "Energie",
+        #                                       "Boite:":"BoiteVitesse",
+        #                                       "Puissance": "PuissanceFiscale",
+        #                                       "prix":"Prix",
+        #                                       "Marque:":"Marque",
+        #                                       "Modele:":"Modele"})

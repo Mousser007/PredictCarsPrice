@@ -3,12 +3,31 @@ from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
 import time
 from math import ceil
-
 import Config
 from Cleaning.ColumnStandardiser import ColumnsStandardiser
 from Cleaning.Cleaner import *
 from Cleaning.BrandModelExtraction import *
 from Config import *
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import sessionmaker
+
+
+class AutoPlusPostScrapping(Base):
+    __tablename__ = 'AutoPlusPostScrapping'
+    id = Column(Integer, primary_key=True)
+    Marque = Column(String)
+    Modele = Column(String)
+    Annee = Column(String)
+    BoiteVitesse = Column(String)
+    Kilometrage = Column(String)
+    Energie = Column(String)
+    PuissanceFiscale = Column(String)
+    datedelannonce = Column(String)
+    desc = Column(String)
+    Prix = Column(String)
+    description = Column(String)
+    etatduvehicule = Column(String)
+    Couleur = Column(String)
 
 
 class ScrappAutoPlusTnOccasion:
@@ -21,10 +40,10 @@ class ScrappAutoPlusTnOccasion:
     def parsing_page_source(self, url: str):
         try:
             self.driver.get(url)
-            time.sleep(20)
+            time.sleep(4)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(25)
+            time.sleep(8)
         return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None
     
     def nextPage(self, soup):
@@ -63,7 +82,7 @@ class ScrappAutoPlusTnOccasion:
         nbreDePage = ceil(nbreDannonce/10)
         listeDesVoitures = []
         # for i in range(1, nbreDePage+1):
-        for i in range(2):
+        for i in range(1,2):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:len(self.baseUrl)-1]+str(i))) 
         try:
             
@@ -75,38 +94,38 @@ class ScrappAutoPlusTnOccasion:
             self.driver.quit()
         return all_Data
 
-    def auto_plus_scrapper_runner(self, OutputFileName):
+    def auto_plus_scrapper_runner(self):
         standardize = ColumnsStandardiser()
-        data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus","Occasion")
-        file_path = os.path.join(data_directory, OutputFileName + '.csv')
         data = self.scrape()
         dataStandardized = standardize.column_standardize(data)
-        standardize.load_data_in_csv_file(dataStandardized, file_path)
+        Base.metadata.create_all(engine)
+        # Créer une session
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        for key, item in dataStandardized.items():
+            autopluspostscrapping = AutoPlusPostScrapping(
+                Energie=item['Energie :'], Annee=item['Mise en circulation :'], Kilometrage=item['kilométrage:'],
+                PuissanceFiscale=item['Puissance fiscal:'], Marque=item['Marque :'], Modele=item['Modèle :'],
+                BoiteVitesse=item['Boite vitesse :'], datedelannonce=item['date de l"annonce'],
+                desc=item['desc'],description=item['description'], Prix=item['prix'], etatduvehicule=item['Etat du véhicule :'])
+            session.add(autopluspostscrapping)
+        # Commit les transactions
+        session.commit()
+        # Fermer la session
+        session.close()
 
     def auto_plus_columns_standardise(self, dataframe):
-        dataframe = dataframe.rename(columns={"kilométrage:": "Kilometrage",
-                                              "Mise en circulation :": "Annee",
-                                              "Energie :": "Energie",
-                                              "Boite vitesse :": "BoiteVitesse",
-                                              "Puissance fiscal:": "PuissanceFiscale",
-                                              "prix": "Prix",
-                                              "Marque :": "Marque",
-                                              "Modèle :": "Modele"})
-        dataframe = dataframe.drop(columns={"Etat du véhicule :", "description",
-                                            "desc", 'date de l"annonce'})
+        dataframe = dataframe.drop(columns={"etatduvehicule", "description",
+                                            "desc", 'datedelannonce'})
         cln = cleaner()
         dataframe = cln.eliminate_unnamed_columns(dataframe)
         return dataframe  
       
     def run_whole_process(self):
-        self.auto_plus_scrapper_runner('AutoPlusFilePostScrapTest')
-        os.makedirs(os.path.join(path_to_DataPostScraping, "AutoPlus", 'Occasion'), exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostScraping, "AutoPlus", 'Occasion', "AutoPlusFilePostScrapTest.csv")
-        AutoPlusData= pd.read_csv(data_directory)
-        AutoPlusDataPostStandardise= self.auto_plus_columns_standardise(AutoPlusData)
-        os.makedirs(path_to_DataPostColumnsStandardisedOccasion, exist_ok=True)
-        data_directory = os.path.join(path_to_DataPostColumnsStandardisedOccasion, "AutoPlusFileColumnStandardised.xlsx")
-        AutoPlusDataPostStandardise.to_excel(data_directory)
+        self.auto_plus_scrapper_runner()
+        AutoPlusDf = pd.read_sql('AutoPlusPostScrapping', con=engine)
+        AutoPlusDataStandardised = self.auto_plus_columns_standardise(AutoPlusDf)
+        AutoPlusDataStandardised.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
 
 
 class ScrappAutoPlusTnNeuf:
@@ -212,7 +231,6 @@ class ScrappAutoPlusTnNeuf:
 
 ## MAIN ##
 if __name__ == "__main__":
-
     pass
 
 
@@ -224,3 +242,12 @@ if __name__ == "__main__":
     # dataframe.to_excel(path_to_AutoPlus_Neuf + "\\test.xlsx")
     # test = ScrappAutoPlusTnNeuf()
     # test.run_whole_process()
+
+# dataframe = dataframe.rename(columns={"kilométrage:": "Kilometrage",
+#                                       "Mise en circulation :": "Annee",
+#                                       "Energie :": "Energie",
+#                                       "Boite vitesse :": "BoiteVitesse",
+#                                       "Puissance fiscal:": "PuissanceFiscale",
+#                                       "prix": "Prix",
+#                                       "Marque :": "Marque",
+#                                       "Modèle :": "Modele"})
