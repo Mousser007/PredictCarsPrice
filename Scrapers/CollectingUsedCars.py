@@ -18,6 +18,6 @@ if __name__ == "__main__":
     # test.run_whole_process()
     # test = ScrappAutoPrixOccasion()
     # test.run_whole_process()
-    test = ScrappOccasionTayaraTn()
-    test.run_whole_process()
+    # test = ScrappOccasionTayaraTn()
+    # test.run_whole_process()
     pass
