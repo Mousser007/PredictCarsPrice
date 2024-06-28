@@ -11,7 +11,6 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 
 
-
 class AutoPrixPostScrapping(Base):
     __tablename__ = 'AutoPrixPostScrapping'
     id = Column(Integer, primary_key=True)
@@ -102,7 +101,7 @@ class ScrappAutoPrixOccasion:
                 Energie=item['Carburant'], Annee=item['Année'], Kilometrage=item['Kilométrage'],
                 PuissanceFiscale=item['Puissance'], Carrosserie=item['Carrosserie'],
                 BoiteVitesse=item['Boite'], datedelannonce=item['date de l"annonce'],
-                desc=item['desc'], description=item['description'], Prix=item['prix'])
+                desc=item['desc'], description=item['description'], Prix=item['prix'],Couleur=item['Couleur'])
             session.add(autoprixpostscrapping)
         # Commit les transactions
         session.commit()
@@ -128,9 +127,16 @@ class ScrappAutoPrixOccasion:
 
 ## MAIN ##
 if __name__ == "__main__":
+    pass
 
-    test = ScrappAutoPrixOccasion()
-    test.run_whole_process()
+
+
+
+
+
+
+    # test = ScrappAutoPrixOccasion()
+    # test.run_whole_process()
 
 
     # autoPrixScrapper = ScrappAutoPrixOccasion()

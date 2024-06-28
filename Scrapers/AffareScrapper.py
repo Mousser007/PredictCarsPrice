@@ -59,7 +59,7 @@ class ScrappOccasionAffareTn:
     def extract_data(self, soup):
         data={}
         try: 
-            dateDeLannonce = soup.find_all('div', {'class': 'Annonce_f201510__BNC4l'})[-1].text.strip()
+            dateDeLannonce = soup.find_all('div', {'class': 'Annonce_f201510__BNC4l'})[-1].text.strip() if  soup.find_all('div', {'class': 'Annonce_f201510__BNC4l'}) else None
             prix = soup.find('span',{'class': 'Annonce_price__tE_l1'}).text.strip() if soup.find('span', {'class': 'Annonce_price__tE_l1'}) else None
             desc= soup.find('div',{'class':'Annonce_product_info__91ryJ Annonce_mozi__0xfZD'}).text.strip() if soup.find('div',{'class':'Annonce_product_info__91ryJ Annonce_mozi__0xfZD'}) else None
             listCarac = soup.find('div',{'class':'Annonce_box_params__nX87s'})
@@ -136,15 +136,16 @@ class ScrappOccasionAffareTn:
         return dataframe
 
     def run_whole_process(self):
-        # self.affare_scrapper_runner()
+        self.affare_scrapper_runner()
         AffareFile =pd.read_sql('AffarePostScrapping', con=engine)
         AffareData = self.affare_columns_standardise(AffareFile)
         AffareData.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
 
 
 if __name__ == "__main__":
-    test = ScrappOccasionAffareTn()
-    test.run_whole_process()
+    pass
+    # test = ScrappOccasionAffareTn()
+    # test.run_whole_process()
     # # Phase cleaning
     # # test = CleaningProcess.CleaningUseCars()
     # # test.cleaning()

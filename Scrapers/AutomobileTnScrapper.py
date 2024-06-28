@@ -39,6 +39,7 @@ class AutomobileTnPostScrapping(Base):
     Sellerie = Column(String)
 
 
+
 class ScrapperAutomobileTnOcc:
     
     def __init__(self):
@@ -58,12 +59,12 @@ class ScrapperAutomobileTnOcc:
     
     def extract_cars_urls(self, pageUrl):
         soup = self.parsing_page_source(pageUrl)
-        atags = soup.find_all('a', {'class': 'occasion-link-overlay'})
+        atags = soup.find_all('a', {'class': 'occasion-link-overlay'}) if soup.find_all('a', {'class': 'occasion-link-overlay'}) else None
         return [a.get('href')[12:] for a in atags]
     
     def extract_data(self, soup):
         data = {}
-        atags = soup.find('div', {'class': 'box d-none d-md-block'})
+        atags = soup.find('div', {'class': 'box d-none d-md-block'}) if soup.find('div', {'class': 'box d-none d-md-block'}) else None
         listeDescCaract = atags.find_all('li')
         for li_tag in listeDescCaract:
             spec_name = li_tag.find('span', {'class': 'spec-name'}).text.strip()
@@ -71,11 +72,11 @@ class ScrapperAutomobileTnOcc:
             data[spec_name] = spec_value
         
         # Modele = soup.find('h1').text.strip()
-        Prix = soup.find('div', {'class': 'price'}).text.strip()
+        Prix = soup.find('div', {'class': 'price'}).text.strip() if soup.find('div', {'class': 'price'}).text.strip() else None
         # data['Modele'] = Modele #Modele=Marque+Modele
         data['Prix'] = Prix
         
-        atagsSpec = soup.find('div', {'class': 'col-md-6 mb-3 mb-md-0'})
+        atagsSpec = soup.find('div', {'class': 'col-md-6 mb-3 mb-md-0'}) if soup.find('div', {'class': 'col-md-6 mb-3 mb-md-0'}) else None
         listeDesSpecification = atagsSpec.find_all('li')
         for li_tag in listeDesSpecification:
             spec_name = li_tag.find('span', {'class': 'spec-name'}).text.strip()
@@ -88,7 +89,7 @@ class ScrapperAutomobileTnOcc:
         urls = []
         try:
             # for i in range(pageInit,pageFinal+1):
-            for i in range(1, 2):
+            for i in range(1, 135):
                 urls.extend(self.extract_cars_urls(self.baseUrl+'/'+str(i)+'?sort=date'))
             all_Data={}
             for index, url in enumerate(urls, start = 1):

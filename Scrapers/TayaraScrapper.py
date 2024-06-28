@@ -126,7 +126,7 @@ class ScrappOccasionTayaraTn:
         # Fermer la session
         session.close()
 
-    def tayara_columns_standardise(self, dataframe):    
+    def tayara_columns_standardise(self, dataframe):
         dataframe = dataframe.drop(columns={"Cylindree", 'datedelannonce', "description", "etatdevehicule"})
         dataframe = dataframe.dropna(how='all')
         cln = cleaner()
@@ -137,7 +137,8 @@ class ScrappOccasionTayaraTn:
     def tayara_missing_marque_modele(self, dataframe):
         extraction = ExtractionMarqueModele()
         dataframe['desc'] = dataframe['desc'].str.upper()
-        dataframe.dropna(subset=["Modele", "desc", "Marque"], inplace=True)
+        dataframe.dropna(subset=["desc"], inplace=True)
+        # dataframe.dropna(subset=["Modele", "desc", "Marque"], inplace=True)
         ## Si la valeur du colonne marque est null: extraire le marque depuis la description (colonne desc)
         maskMarque = dataframe['Marque'].isnull()
         dataframe.loc[maskMarque, 'Marque'] = dataframe.loc[maskMarque, 'desc'].apply(lambda x: extraction.extraire_marque(x))
@@ -161,7 +162,7 @@ class ScrappOccasionTayaraTn:
         return dataframe
     
     def run_whole_process(self):
-        self.tayara_scrapper_runner()
+        # self.tayara_scrapper_runner()
         tayaraDf = pd.read_sql('TayaraPostScrapping', con=engine)
         tayaraDataStandardised = self.tayara_columns_standardise(tayaraDf)
         tayaraDataStandardised.to_sql('DataStandardised', con=engine, if_exists='append', index=False)
@@ -169,10 +170,9 @@ class ScrappOccasionTayaraTn:
 
 ##MAIN##
 if __name__ == "__main__":
-
-    test = ScrappOccasionTayaraTn()
-    test.run_whole_process()
-
+    pass
+    # test = ScrappOccasionTayaraTn()
+    # test.run_whole_process()
     # tayara = ScrappOccasionTayaraTn()
     # tayara.pageInitiale = 1
     # tayara.pageFinale = 1

@@ -234,6 +234,19 @@ if __name__ == "__main__":
     pass
 
 
+
+
+
+
+
+
+
+
+
+
+
+    # test = ScrappAutoPlusTnOccasion()
+    # test.run_whole_process()
     # parent_directory = os.path.dirname(os.getcwd())
     # path_to_AutoPlus_Neuf = os.path.join(parent_directory, 'Data', 'DataPostScraping', 'AutoPlus', 'Neuf')
     # dataframe = pd.read_excel("D:\\PredictCarsPrice\\Data\\DataPostScraping\\AutoPlusNeuf.xlsx")

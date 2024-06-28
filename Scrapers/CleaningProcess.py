@@ -40,6 +40,7 @@ class CleaningUseCars:
         # dataframe.to_csv(os.path.join(path_to_DataPostCleaning, 'dataMergedAndCleaned.csv'),sep=';')
         return dataframe
 
+
 class CleaningNewCars:
 
     def __init__(self):
@@ -65,10 +66,9 @@ class CleaningNewCars:
 
 
 if __name__ == "__main__":
-    clean = CleaningUseCars()
-    clean.cleaning()
-
-
+    # clean = CleaningUseCars()
+    # clean.cleaning()
+    pass
 
 
 
