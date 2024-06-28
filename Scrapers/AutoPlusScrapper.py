@@ -40,10 +40,10 @@ class ScrappAutoPlusTnOccasion:
     def parsing_page_source(self, url: str):
         try:
             self.driver.get(url)
-            time.sleep(4)
+            time.sleep(25)
         except WebDriverException:
             self.driver.refresh()
-            time.sleep(8)
+            time.sleep(25)
         return BeautifulSoup(self.driver.page_source, 'html.parser') if BeautifulSoup(self.driver.page_source, 'html.parser') else None
     
     def nextPage(self, soup):
