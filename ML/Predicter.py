@@ -139,6 +139,7 @@ class Prediction:
             'Mean Absolute Error': mae
         }
         with open('metrics.json', 'w') as f:
+            json.dump(metrics, f)
         logger.info(f"R2 Score: {r2}")
         logger.info(f"Mean Squared Error: {mse}")
         logger.info(f"Mean Absolute Error: {mae}")
