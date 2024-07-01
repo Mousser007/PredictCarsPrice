@@ -11,6 +11,10 @@ from sklearn.preprocessing import MinMaxScaler
 from xgboost import XGBRegressor
 from Config import *
 from Cleaning.Cleaner import cleaner
+from sklearn.metrics import r2_score
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 
 class datapreparation:
@@ -87,7 +91,8 @@ class Prediction:
         X_test["AbsError"] = np.abs(y_test-y_pred)
         mae = np.mean(X_test["AbsError"])
         # print("Mean Absolute Error:", mae)
-        return X_test,mse,mae, regressor
+        r2 = r2_score(y_test, y_pred)
+        return X_test,mse,mae,r2, regressor
 
     def eliminer_les_valeur_null(self, dataframe):
         dataframe = dataframe.loc[dataframe.Kilometrage != 0]
@@ -116,22 +121,27 @@ class Prediction:
         data = prepare.extraire_top_car_per_column_name(data, "Marque", 15)
         data = prepare.extraire_top_car_per_column_name(data, "Modele", 6)
         data = data.groupby('Marque').apply(prepare.remove_outliers, min_value=0.01, max_value=0.98).reset_index(drop= True)
+        data.to_sql("DataForApi", con=engine, if_exists='replace', index=False)
         scaler = MinMaxScaler()
         data['Prix_normalisé'] = scaler.fit_transform(data[['Prix']])
-        joblib.dump(scaler, os.path.join(path_to_RequirementsFiles, "scaler.joblib"))
+        # joblib.dump(scaler, os.path.join(path_to_RequirementsFiles, "scaler.joblib"))
         listOfColumnToDrop = ["Prix", "Prix_normalisé"]
         targetColumnName = "Prix_normalisé"
         inputValue, outputValue, dict = self.label_encoder_columns(data, listOfColumnToDrop, targetColumnName)
-        for key, value in dict.items():
-            joblib.dump(value, os.path.join(path_to_RequirementsFiles, ('label_encoder' + key + '.pkl')))
+        # for key, value in dict.items():
+        #     joblib.dump(value, os.path.join(path_to_RequirementsFiles, ('label_encoder' + key + '.pkl')))
         X_train, X_test, y_train, y_test = self.train_test_split(inputValue, outputValue)
-        predictedDf, mse, mae, trainedRegressor = self.predict_algo(X_train, y_train, X_test, y_test, regressor)
-        joblib.dump(trainedRegressor, os.path.join(path_to_RequirementsFiles, "modele_xgboost.pkl"))
+        predictedDf, mse, mae, r2, trainedRegressor = self.predict_algo(X_train, y_train, X_test, y_test, regressor)
+        # joblib.dump(trainedRegressor, os.path.join(path_to_RequirementsFiles, "modele_xgboost.pkl"))
+        logger.info(f"R2 Score: {r2}")
+        logger.info(f"Mean Squared Error: {mse}")
+        logger.info(f"Mean Absolute Error: {mae}")
         return ("Mise à jours du modéle avec succées")
 
     # "Date du mise à jour du modele: ", datetime.datetime.now() + "/n" +
     # "Mean squarred error:",mse
     # "Mean absolute error:",mae
+    #"R2 Score: ",r2
 
     def preprocess_input(self, input_values):
         df = pd.DataFrame([input_values])

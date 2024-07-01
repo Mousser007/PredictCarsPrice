@@ -19,14 +19,15 @@ class AffarePostScrapping(Base):
     __tablename__ = 'AffarePostScrapping'
     id = Column(Integer, primary_key=True)
     Energie = Column(String)
-    Année = Column(String)
-    Kilométrage = Column(String)
-    Puissance= Column(String)
+    Annee = Column(String)
+    Kilometrage = Column(String)
+    PuissanceFiscale= Column(String)
     Miseencirculation = Column(String)
-    Boite = Column(String)
+    BoiteVitesse = Column(String)
     datedelannonce = Column(String)
     desc = Column(String)
-    prix = Column(String)
+    Prix = Column(String)
+    description = Column(String)
 
 
 class ScrappOccasionAffareTn:
@@ -84,7 +85,7 @@ class ScrappOccasionAffareTn:
         # Config.nbre_annonce_site_affare = nbreDAnnonceTotale
         listeDesVoitures = []
         # for i in range(nbreDePageTotale+1):
-        for i in range(1, 2):
+        for i in range(1, 3):
             listeDesVoitures.extend(self.extract_cars_urls(self.baseUrl[:94]+str(i)+self.baseUrl[95:]))
         #l3 = [element for element in listeDesVoitures if element not in Config.liste_de_voiture_affare]
         try:
@@ -109,10 +110,10 @@ class ScrappOccasionAffareTn:
         session = Session()
         for key, item in dataStandardized.items():
             affarepostscrapping = AffarePostScrapping(
-                Energie=item['Energie'], Année=item['Année'], Kilométrage=item['Kilométrage'],
-                Puissance=item['Puissance'], Miseencirculation=item['Mise en circulation'],
-                Boite=item['Boîte'], datedelannonce=item["date de l'annonce"],
-                desc=item['desc'],prix=item['prix'])
+                Energie=item['Energie'], Annee=item['Année'], Kilometrage=item['Kilométrage'],
+                PuissanceFiscale=item['Puissance'], Miseencirculation=item['Mise en circulation'],
+                BoiteVitesse=item['Boîte'], datedelannonce=item["date de l'annonce"],
+                desc=item['desc'],Prix=item['prix'])
             session.add(affarepostscrapping)
         # Commit les transactions
         session.commit()
@@ -121,11 +122,6 @@ class ScrappOccasionAffareTn:
 
     def affare_columns_standardise(self, dataframe):   
         extraction = ExtractionMarqueModele()
-        dataframe = dataframe.rename(columns={"Kilométrage": "Kilometrage",
-                                              "Année": "Annee",
-                                              "Boite": "BoiteVitesse",
-                                              "prix":"Prix",
-                                              "Puissance":"PuissanceFiscale"})
         dataframe = dataframe.drop(columns={"Miseencirculation", "datedelannonce"})
         dataframe['description'] = dataframe['desc']
         dataframe = dataframe.drop(columns={'desc'})
@@ -149,3 +145,8 @@ if __name__ == "__main__":
     # # Phase cleaning
     # # test = CleaningProcess.CleaningUseCars()
     # # test.cleaning()
+# dataframe = dataframe.rename(columns={"Kilométrage": "Kilometrage",
+#                                               "Année": "Annee",
+#                                               "Boite": "BoiteVitesse",
+#                                               "prix":"Prix",
+#                                               "Puissance":"PuissanceFiscale"})

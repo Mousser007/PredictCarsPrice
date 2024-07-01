@@ -88,7 +88,7 @@ class ScrapperAutomobileTnOcc:
         urls = []
         try:
             # for i in range(pageInit,pageFinal+1):
-            for i in range(1, 135):
+            for i in range(1, 2):
                 urls.extend(self.extract_cars_urls(self.baseUrl+'/'+str(i)+'?sort=date'))
             all_Data={}
             for index, url in enumerate(urls, start = 1):

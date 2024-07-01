@@ -19,11 +19,7 @@ class CleaningUseCars:
 
     def cleaning(self):
         dataframe = pd.read_sql('DataStandardised', con=engine)
-        # dataframe = self.importer.merge_excel_files(os.path.join(path_to_DataPostColumnsStandardisedOccasion, ""))
         dataframe = self.cln.eliminate_unnamed_columns(dataframe)
-        # os.makedirs(path_to_DataPostCleaning, exist_ok=True)
-        # dataframe.to_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';')
-        # dataframe = pd.read_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';', index_col=0)
         dataframe = self.cln.nettoyer_marque(dataframe)
         dataframe = self.cln.nettoyer_modele(dataframe)
         dataframe = self.cln.nettoyer_col_annee(dataframe)
@@ -32,12 +28,9 @@ class CleaningUseCars:
         dataframe = self.cln.nettoyer_puissance_fiscale(dataframe)
         dataframe = self.cln.nettoyer_col_kilometrage(dataframe)
         dataframe = self.cln.nettoyer_prix(dataframe)
-        # dataframe = self.cln.nettoyer_couleur(dataframe)
-        # dataframe = self.cln.nettoyer_carrosserie(dataframe)
         dataframe.drop_duplicates(inplace=True)
         dataframe.drop_duplicates(inplace=True)
         dataframe.to_sql('DataCleaned', con=engine, if_exists='append', index=False)
-        # dataframe.to_csv(os.path.join(path_to_DataPostCleaning, 'dataMergedAndCleaned.csv'),sep=';')
         return dataframe
 
 
@@ -69,16 +62,13 @@ if __name__ == "__main__":
     # clean = CleaningUseCars()
     # clean.cleaning()
     pass
-
-
-
-
-
-
-
-
-
-
+    # dataframe = self.importer.merge_excel_files(os.path.join(path_to_DataPostColumnsStandardisedOccasion, ""))
+    # os.makedirs(path_to_DataPostCleaning, exist_ok=True)
+    # dataframe.to_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';')
+    # dataframe = pd.read_csv(os.path.join(path_to_DataPostCleaning, "dataMerged.csv"), sep=';', index_col=0)
+    # dataframe = self.cln.nettoyer_couleur(dataframe)
+    # dataframe = self.cln.nettoyer_carrosserie(dataframe)
+    # dataframe.to_csv(os.path.join(path_to_DataPostCleaning, 'dataMergedAndCleaned.csv'),sep=';')
     # def testPipeline(self):
     #     # Nettoyage des données phase 1
     #     imp = Importer()
