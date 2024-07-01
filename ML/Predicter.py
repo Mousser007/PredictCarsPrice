@@ -15,7 +15,7 @@ from sklearn.metrics import r2_score
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
-
+import json
 
 class datapreparation:
 
@@ -133,6 +133,12 @@ class Prediction:
         X_train, X_test, y_train, y_test = self.train_test_split(inputValue, outputValue)
         predictedDf, mse, mae, r2, trainedRegressor = self.predict_algo(X_train, y_train, X_test, y_test, regressor)
         # joblib.dump(trainedRegressor, os.path.join(path_to_RequirementsFiles, "modele_xgboost.pkl"))
+        metrics = {
+            'r2 Score': r2,
+            'Mean Squared Error': mse,
+            'Mean Absolute Error': mae
+        }
+        with open('metrics.json', 'w') as f:
         logger.info(f"R2 Score: {r2}")
         logger.info(f"Mean Squared Error: {mse}")
         logger.info(f"Mean Absolute Error: {mae}")
